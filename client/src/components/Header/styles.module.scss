@@ -1,0 +1,36 @@
+.header {
+  height: 60px;
+  width: 100%;
+  background-color: rgb(91, 141, 214);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  ul{
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+  
+    li {
+      margin-left: 20px;
+
+      a {
+        text-decoration: none;
+        color: #fff;
+        font-size: 18px;
+        text-transform: uppercase
+      }
+      a:hover {
+        color: rgb(255, 177, 177);
+      }
+    }
+  }
+
+  .active {
+    color: rgb(112, 11, 11);
+  }
+}
+
+
