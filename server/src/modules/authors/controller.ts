@@ -14,37 +14,41 @@ exports.createAuthor = () => {
   });
 };
 
-exports.getAuthors = (req: express.Request, res: express.Response) => {
-  db.authors
-    .find()
-    .sort({ updatedAt: -1 })
-    .then((result: any) => res.send(result))
-    .catch((e: any) => {
-      res.send({ status: "ERROR" });
-      console.log(e);
-    });
+exports.getAuthors = async (req: express.Request, res: express.Response) => {
+  try {
+    const result = await db.authors.find().sort({ updatedAt: -1 });
+
+    res.send(result);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
 };
-exports.getAuthorsById = (req: express.Request, res: express.Response) => {
+exports.getAuthorsById = async (
+  req: express.Request,
+  res: express.Response
+) => {
   const _id = req.params.id;
-  db.authors
-    .findById({ _id })
-    .sort({ updatedAt: -1 })
-    .then((result: any) => res.send(result))
-    .catch((e: any) => {
-      res.send({ status: "ERROR" });
-      console.log(e);
-    });
+  try {
+    const result = await db.authors.findById({ _id }).sort({ updatedAt: -1 });
+
+    res.send(result);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
 };
 
-exports.updateAuthorBooks = (req: express.Request, res: express.Response) => {
+exports.updateAuthorBooks = async (
+  req: express.Request,
+  res: express.Response
+) => {
   const _id = req.params.id;
+  try {
+    const result = await db.authors
+      .findByIdAndUpdate({ _id }, { $push: { books: req.body.bookId } })
+      .sort({ updatedAt: -1 });
 
-  db.authors
-    .findByIdAndUpdate({ _id }, { $push: { books: req.body.bookId } })
-    .sort({ updatedAt: -1 })
-    .then((result: any) => res.send(result))
-    .catch((e: any) => {
-      res.send({ status: "ERROR" });
-      console.log(e);
-    });
+    res.send(result);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
 };

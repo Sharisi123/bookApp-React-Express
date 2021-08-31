@@ -15,7 +15,8 @@ interface IProps {
   content: string;
   id: string;
   authorId: string;
-  getBooksHandler: () => void;
+  getBooksHandler?: () => void;
+  viewMode?: boolean;
 }
 
 const BookItem = ({
@@ -26,6 +27,7 @@ const BookItem = ({
   id,
   authorId,
   getBooksHandler,
+  viewMode,
 }: IProps) => {
   const [imgState, setImgState] = useState(img);
   const [titleState, setTitleState] = useState(title);
@@ -41,7 +43,8 @@ const BookItem = ({
   };
   const onDelete = async () => {
     await deleteBook(id);
-    getBooksHandler();
+
+    getBooksHandler && (await getBooksHandler());
   };
 
   const getAuthorName = async () => {
@@ -54,6 +57,7 @@ const BookItem = ({
 
   useEffect(() => {
     getAuthorName();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const updateBookHandler = async () => {
@@ -68,7 +72,7 @@ const BookItem = ({
     });
     setIsButtonDisable(false);
     onEdit();
-    await getBooksHandler();
+    getBooksHandler && (await getBooksHandler());
   };
 
   return (
@@ -100,8 +104,12 @@ const BookItem = ({
                 )}
               </h1>
               <div>
-                <EditOutlined onClick={onEdit} />
-                <DeleteOutlined onClick={onDelete} />
+                {!viewMode ? (
+                  <>
+                    <EditOutlined onClick={onEdit} />
+                    <DeleteOutlined onClick={onDelete} />
+                  </>
+                ) : null}
               </div>
             </div>
 

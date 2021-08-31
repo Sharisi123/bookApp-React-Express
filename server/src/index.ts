@@ -30,7 +30,7 @@ app.use("/api", authorsRouter.router);
 const start = async () => {
   try {
     await mongoose.connect(
-      `mongodb+srv://${process.env.NODE_MONGODB_USERNAME}:${process.env.NODE_MONGODB_PASSWORD}@cluster0.pnaky.mongodb.net/books`,
+      `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_HOST}/books`,
       {
         // @ts-ignore
         useNewUrlParser: true,

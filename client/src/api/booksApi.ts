@@ -5,6 +5,10 @@ export const getBooks = async (): Promise<IGetBookResponse[]> => {
   const { data } = await api.get("/books");
   return data;
 };
+export const getBookById = async (id: string): Promise<IGetBookResponse[]> => {
+  const { data } = await api.get("/books/" + id);
+  return data;
+};
 
 export const setBooks = async (data: any): Promise<any> => {
   const response = await api.post("/books", data);
@@ -12,7 +16,7 @@ export const setBooks = async (data: any): Promise<any> => {
 };
 
 export const updateBook = async (payload: any): Promise<any> => {
-  const response = await api.put("/books", { payload });
+  const response = await api.patch("/books", { payload });
   return response;
 };
 

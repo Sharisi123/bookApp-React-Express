@@ -9,7 +9,7 @@ router.get("/books/:id", booksController.getBooksById);
 
 router.post("/books", booksController.setBooks);
 
-router.put("/books", booksController.updateBooksById);
+router.patch("/books", booksController.updateBooksById);
 
 router.delete("/books/:id", booksController.deleteBooksById);
 

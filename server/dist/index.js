@@ -32,7 +32,7 @@ app.use("/api", booksRouter.router);
 app.use("/api", authorsRouter.router);
 const start = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield mongoose.connect(`mongodb+srv://${process.env.NODE_MONGODB_USERNAME}:${process.env.NODE_MONGODB_PASSWORD}@cluster0.pnaky.mongodb.net/books`, {
+        yield mongoose.connect(`mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_HOST}/books`, {
             // @ts-ignore
             useNewUrlParser: true,
         });

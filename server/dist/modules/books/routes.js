@@ -9,7 +9,7 @@ const router = express_1.default.Router();
 router.get("/books", booksController.getBooks);
 router.get("/books/:id", booksController.getBooksById);
 router.post("/books", booksController.setBooks);
-router.put("/books", booksController.updateBooksById);
+router.patch("/books", booksController.updateBooksById);
 router.delete("/books/:id", booksController.deleteBooksById);
 module.exports = router;
 //# sourceMappingURL=routes.js.map

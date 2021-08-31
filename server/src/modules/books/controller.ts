@@ -15,64 +15,62 @@ exports.createBook = () => {
   });
 };
 
-exports.getBooks = (req: express.Request, res: express.Response) => {
-  db.books
-    .find()
-    .sort({ updatedAt: -1 })
-    .then((result: any) => res.send(result))
-    .catch((e: any) => {
-      res.send({ status: "ERROR" });
-      console.log(e);
-    });
-};
-exports.getBooksById = (req: express.Request, res: express.Response) => {
-  const _id = req.params.id;
-  db.books
-    .findById({ _id })
-    .sort({ updatedAt: -1 })
-    .then((result: any) => res.send(result))
-    .catch((e: any) => {
-      res.send({ status: "ERROR" });
-      console.log(e);
-    });
-};
-exports.setBooks = (req: express.Request, res: express.Response) => {
-  console.log(req.body);
+exports.getBooks = async (req: express.Request, res: express.Response) => {
+  try {
+    const result = await db.books.find().sort({ updatedAt: -1 });
 
-  const bookList = new db.books({
-    ...req.body,
-  });
+    res.send(result);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+};
+exports.getBooksById = async (req: express.Request, res: express.Response) => {
+  try {
+    const _id = req.params.id;
+    const result = await db.books.findById({ _id }).sort({ updatedAt: -1 });
+    res.send(result);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+};
+exports.setBooks = async (req: express.Request, res: express.Response) => {
+  try {
+    const bookList = new db.books({
+      ...req.body,
+    });
 
-  bookList
-    .save()
-    .then((result: any) => res.send(result))
-    .catch((e: any) => {
-      res.send({ status: "ERROR" });
-      console.log(e);
-    });
+    const result = await bookList.save();
+
+    res.send(result);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
 };
-exports.updateBooksById = (req: express.Request, res: express.Response) => {
-  db.books
-    .findByIdAndUpdate({ _id: req.body.payload.id }, req.body.payload)
-    .then(() =>
-      db.books
-        .findOne({ _id: req.body.payload.id })
-        .then(() => res.send({ status: "OK" }))
-    )
-    .catch((e: any) => {
-      res.send({ status: "ERROR" });
-      console.log(e);
-    });
+exports.updateBooksById = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    await db.books.findByIdAndUpdate(
+      { _id: req.body.payload.id },
+      req.body.payload
+    );
+    await db.books.findOne({ _id: req.body.payload.id });
+
+    res.status(200).send();
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
 };
-exports.deleteBooksById = (req: express.Request, res: express.Response) => {
-  const _id = req.query.id;
-  db.books
-    .findByIdAndDelete({ _id })
-    .then(() => {
-      res.send({ status: "OK" });
-    })
-    .catch((e: any) => {
-      res.send({ status: "ERROR" });
-      console.log(e);
-    });
+exports.deleteBooksById = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const _id = req.query.id;
+    await db.books.findByIdAndDelete({ _id });
+    res.status(200).send();
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
 };
