@@ -1,9 +1,12 @@
-import React, { useState } from "react";
-import { deleteBook, updateBook } from "api/api";
+import React, { useEffect, useState } from "react";
+import { deleteBook, updateBook } from "api/booksApi";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import styles from "./styles.module.scss";
 import { Button, Input } from "antd";
 import TextArea from "antd/lib/input/TextArea";
+import { getAuthorsById } from "api/authorsApi";
+import Loader from "components/Loader";
+import { NavLink } from "react-router-dom";
 
 interface IProps {
   img: string;
@@ -11,6 +14,7 @@ interface IProps {
   date: string;
   content: string;
   id: string;
+  authorId: string;
   getBooksHandler: () => void;
 }
 
@@ -20,14 +24,17 @@ const BookItem = ({
   date,
   content,
   id,
+  authorId,
   getBooksHandler,
 }: IProps) => {
-  let [imgState, setImgState] = useState(img);
-  let [titleState, setTitleState] = useState(title);
-  let [dateState, setDateState] = useState(date);
-  let [contentState, setContentState] = useState(content);
-  let [isEdited, setIsEdited] = useState(false);
-  let [loading, setLoading] = useState(false);
+  const [imgState, setImgState] = useState(img);
+  const [titleState, setTitleState] = useState(title);
+  const [dateState, setDateState] = useState(date);
+  const [contentState, setContentState] = useState(content);
+  const [authorName, setAuthorName] = useState("");
+  const [isEdited, setIsEdited] = useState(false);
+  const [isButtonDisable, setIsButtonDisable] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const onEdit = () => {
     setIsEdited((edited) => !edited);
@@ -37,74 +44,103 @@ const BookItem = ({
     getBooksHandler();
   };
 
-  const updateBookHandler = async () => {
+  const getAuthorName = async () => {
     setLoading(true);
-    await updateBook(id, {
+    const data = await getAuthorsById(authorId);
+    // @ts-ignore
+    setAuthorName(data.firstName + " " + data.lastName);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getAuthorName();
+  }, []);
+
+  const updateBookHandler = async () => {
+    setIsButtonDisable(true);
+    await updateBook({
       img: imgState,
       title: titleState,
       realizeDate: dateState,
       content: contentState,
+      authorId,
+      id,
     });
-    setLoading(false);
+    setIsButtonDisable(false);
     onEdit();
     await getBooksHandler();
   };
 
   return (
     <div className={styles.bookItem}>
-      <div>
-        {isEdited ? (
-          <Input
-            value={imgState}
-            onChange={(e) => setImgState(e.target.value)}
-          />
-        ) : (
-          <img src={img} alt="bookLogo" />
-        )}
-      </div>
-      <div className={styles.content}>
-        <div className={styles.headLine}>
-          <h1>
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <div>
             {isEdited ? (
               <Input
-                value={titleState}
-                onChange={(e) => setTitleState(e.target.value)}
+                value={imgState}
+                onChange={(e) => setImgState(e.target.value)}
               />
             ) : (
-              title
+              <img src={img} alt="bookLogo" />
             )}
-          </h1>
-          <div>
-            <EditOutlined onClick={onEdit} />
-            <DeleteOutlined onClick={onDelete} />
           </div>
-        </div>
-        <p>
-          {isEdited ? (
-            <TextArea
-              value={contentState}
-              onChange={(e) => setContentState(e.target.value)}
-            />
-          ) : (
-            content
-          )}
-        </p>
-        <span>
-          {isEdited ? (
-            <Input
-              value={dateState}
-              onChange={(e) => setDateState(e.target.value)}
-            />
-          ) : (
-            date
-          )}
-        </span>
-        {isEdited && (
-          <Button onClick={updateBookHandler} disabled={loading} type="primary">
-            Update
-          </Button>
-        )}
-      </div>
+          <div className={styles.content}>
+            <div className={styles.headLine}>
+              <h1>
+                {isEdited ? (
+                  <Input
+                    value={titleState}
+                    onChange={(e) => setTitleState(e.target.value)}
+                  />
+                ) : (
+                  title
+                )}
+              </h1>
+              <div>
+                <EditOutlined onClick={onEdit} />
+                <DeleteOutlined onClick={onDelete} />
+              </div>
+            </div>
+
+            <p>
+              Автор: <NavLink to={`/authors/${authorId}`}>{authorName}</NavLink>
+            </p>
+
+            <p>
+              {isEdited ? (
+                <TextArea
+                  value={contentState}
+                  onChange={(e) => setContentState(e.target.value)}
+                />
+              ) : (
+                content
+              )}
+            </p>
+            <span>
+              {isEdited ? (
+                <Input
+                  value={dateState}
+                  onChange={(e) => setDateState(e.target.value)}
+                />
+              ) : (
+                date
+              )}
+            </span>
+            {isEdited && (
+              <Button
+                onClick={updateBookHandler}
+                disabled={isButtonDisable}
+                type="primary"
+              >
+                Update
+              </Button>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 };
