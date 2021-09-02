@@ -1,18 +1,35 @@
 import express from "express";
 
 require("dotenv").config();
-const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const session = require("express-session");
+const passport = require("passport");
+const { connectMongoDB } = require("./connectMongoDB");
+
+const db = require("./modules/login/models");
 
 const booksRouter = require("./modules/books/");
 const authorsRouter = require("./modules/authors");
+const usersRouter = require("./modules/users");
 
-// const createAuthor = require("./modules/authors/controller");
+const localStrategy = require("./modules/users").localStrategy;
 
-const port = process.env.PORT;
+const port = process.env.PORT || 4200;
 
 const app = express();
+
+app.use(
+  session({
+    secret: "r8q,+&1LM3)CD*zAGpx1xm{NeQhc;#",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 60 * 60 * 1000 }, // 1 hour
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -22,26 +39,16 @@ app.use(
   })
 );
 
-// createAuthor.createAuthor();
+passport.use(localStrategy);
+
+passport.serializeUser(db.login.serializeUser());
+passport.deserializeUser(db.login.deserializeUser());
 
 app.use("/api", booksRouter.router);
 app.use("/api", authorsRouter.router);
+app.use("/api/users", usersRouter.router);
 
-const start = async () => {
-  try {
-    await mongoose.connect(
-      `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_HOST}/books`,
-      {
-        // @ts-ignore
-        useNewUrlParser: true,
-      }
-    );
-  } catch (e) {
-    console.log(e);
-  }
-};
-
-start();
+connectMongoDB();
 
 app.listen(port, () => {
   console.log(`Server starts on port http://localhost:${port}`);

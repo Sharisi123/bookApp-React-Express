@@ -1,6 +1,5 @@
 import express from "express";
 
-// import db from './models'
 const db = require("./models");
 
 exports.createBook = () => {

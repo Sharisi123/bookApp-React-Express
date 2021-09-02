@@ -1,6 +1,14 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-// import db from './models'
 const db = require("./models");
 exports.createBook = () => {
     db.books.create({
@@ -12,59 +20,53 @@ exports.createBook = () => {
         _id: "bistroPadaya",
     });
 };
-exports.getBooks = (req, res) => {
-    db.books
-        .find()
-        .sort({ updatedAt: -1 })
-        .then((result) => res.send(result))
-        .catch((e) => {
-        res.send({ status: "ERROR" });
-        console.log(e);
-    });
-};
-exports.getBooksById = (req, res) => {
-    const _id = req.params.id;
-    db.books
-        .findById({ _id })
-        .sort({ updatedAt: -1 })
-        .then((result) => res.send(result))
-        .catch((e) => {
-        res.send({ status: "ERROR" });
-        console.log(e);
-    });
-};
-exports.setBooks = (req, res) => {
-    console.log(req.body);
-    const bookList = new db.books(Object.assign({}, req.body));
-    bookList
-        .save()
-        .then((result) => res.send(result))
-        .catch((e) => {
-        res.send({ status: "ERROR" });
-        console.log(e);
-    });
-};
-exports.updateBooksById = (req, res) => {
-    db.books
-        .findByIdAndUpdate({ _id: req.body.payload.id }, req.body.payload)
-        .then(() => db.books
-        .findOne({ _id: req.body.payload.id })
-        .then(() => res.send({ status: "OK" })))
-        .catch((e) => {
-        res.send({ status: "ERROR" });
-        console.log(e);
-    });
-};
-exports.deleteBooksById = (req, res) => {
-    const _id = req.query.id;
-    db.books
-        .findByIdAndDelete({ _id })
-        .then(() => {
-        res.send({ status: "OK" });
-    })
-        .catch((e) => {
-        res.send({ status: "ERROR" });
-        console.log(e);
-    });
-};
+exports.getBooks = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield db.books.find().sort({ updatedAt: -1 });
+        res.send(result);
+    }
+    catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+exports.getBooksById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const _id = req.params.id;
+        const result = yield db.books.findById({ _id }).sort({ updatedAt: -1 });
+        res.send(result);
+    }
+    catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+exports.setBooks = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const bookList = new db.books(Object.assign({}, req.body));
+        const result = yield bookList.save();
+        res.send(result);
+    }
+    catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+exports.updateBooksById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield db.books.findByIdAndUpdate({ _id: req.body.payload.id }, req.body.payload);
+        yield db.books.findOne({ _id: req.body.payload.id });
+        res.status(200).send();
+    }
+    catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+exports.deleteBooksById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const _id = req.query.id;
+        yield db.books.findByIdAndDelete({ _id });
+        res.status(200).send();
+    }
+    catch (err) {
+        res.status(500).send(err.message);
+    }
+});
 //# sourceMappingURL=controller.js.map
