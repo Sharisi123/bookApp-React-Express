@@ -1,8 +1,11 @@
-const LocalStrategy = require("passport-local").Strategy;
+require("dotenv").config();
 const db = require("./models");
 const bcrypt = require("bcrypt");
 
-const saltRounds = 10;
+const LocalStrategy = require("passport-local").Strategy;
+const GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
+
+const saltRounds = process.env.BCRYPT_SALTROUNDS || 10;
 
 const findUser = async (username: string, callback: any) => {
   try {
@@ -41,7 +44,7 @@ exports.register = async (req: any, res: any) => {
   }
 };
 
-exports.localStrategy = new LocalStrategy(
+exports.LocalStrategy = new LocalStrategy(
   (username: any, password: any, done: any) => {
     findUser(username, (err: any, user: any) => {
       if (err) {
@@ -57,6 +60,47 @@ exports.localStrategy = new LocalStrategy(
           return done(null, user);
         }
       });
+    });
+  }
+);
+
+const findOrCreateGoogleUser = async (profile: any, callback: any) => {
+  try {
+    const result = await db.googleUsers.findById({ _id: profile.id });
+    if (!result) {
+      const createdGoogleUser = await db.googleUsers.create({
+        _id: profile.id,
+        displayName: profile._json.name,
+        firstName: profile._json.given_name,
+        lastName: profile._json.family_name,
+        picture: profile._json.picture,
+        role: "Reader",
+      });
+      return callback(null, createdGoogleUser);
+    } else {
+      return callback(null, result);
+    }
+  } catch (err) {
+    console.log(err.message);
+    return callback(err.message, null);
+  }
+};
+
+exports.GoogleStrategy = new GoogleStrategy(
+  {
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: "http://localhost:4200",
+  },
+  async (accessToken: any, refreshToken: any, profile: any, done: any) => {
+    findOrCreateGoogleUser(profile, (err: string, user: any) => {
+      if (err) {
+        return done(err);
+      }
+      if (!user) {
+        return done(null, false);
+      }
+      return done(null, user);
     });
   }
 );

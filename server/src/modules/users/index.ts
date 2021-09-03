@@ -1,4 +1,5 @@
 module.exports = {
-  localStrategy: require("./controller").localStrategy,
+  LocalStrategy: require("./controller").LocalStrategy,
+  GoogleStrategy: require("./controller").GoogleStrategy,
   router: require("./routes"),
 };

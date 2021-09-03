@@ -29,7 +29,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -50,6 +49,7 @@
   },
   "devDependencies": {
     "@types/history": "^4.7.9",
+    "@types/lodash": "^4.14.172",
     "@types/react-router": "^5.1.16",
     "@types/react-router-dom": "^5.1.8"
   }

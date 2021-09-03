@@ -7,9 +7,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+require("dotenv").config();
 const LocalStrategy = require("passport-local").Strategy;
 const db = require("./models");
 const bcrypt = require("bcrypt");
+const GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 const saltRounds = 10;
 const findUser = (username, callback) => __awaiter(this, void 0, void 0, function* () {
     try {
@@ -17,7 +19,7 @@ const findUser = (username, callback) => __awaiter(this, void 0, void 0, functio
         return callback("", result);
     }
     catch (err) {
-        return callback("user not found", null);
+        return callback(err.message, null);
     }
 });
 exports.passportLogin = (req, res) => {
@@ -39,7 +41,7 @@ exports.register = (req, res) => __awaiter(this, void 0, void 0, function* () {
         console.log(err);
     }
 });
-exports.localStrategy = new LocalStrategy((username, password, done) => {
+exports.LocalStrategy = new LocalStrategy((username, password, done) => {
     findUser(username, (err, user) => {
         if (err) {
             return done(err);
@@ -57,4 +59,44 @@ exports.localStrategy = new LocalStrategy((username, password, done) => {
         });
     });
 });
+const findOrCreateGoogleUser = (profile, callback) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        const result = yield db.googleUsers.findById({ _id: profile.id });
+        if (!result) {
+            const createdGoogleUser = yield db.googleUsers.create({
+                _id: profile.id,
+                displayName: profile._json.name,
+                firstName: profile._json.given_name,
+                lastName: profile._json.family_name,
+                picture: profile._json.picture,
+                role: "Reader",
+            });
+            console.log("created log", createdGoogleUser);
+            return callback(null, createdGoogleUser);
+        }
+        else {
+            return callback(null, result);
+        }
+    }
+    catch (err) {
+        console.log(err.message);
+        return callback(err.message, null);
+    }
+});
+exports.GoogleStrategy = new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: "http://localhost:4200/api/users/google/callback",
+    proxy: true,
+}, (accessToken, refreshToken, profile, done) => __awaiter(this, void 0, void 0, function* () {
+    findOrCreateGoogleUser(profile, (err, user) => {
+        if (err) {
+            return done(err);
+        }
+        if (!user) {
+            return done(null, false);
+        }
+        return done(null, user);
+    });
+}));
 //# sourceMappingURL=controller.js.map

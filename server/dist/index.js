@@ -14,9 +14,12 @@ const db = require("./modules/login/models");
 const booksRouter = require("./modules/books/");
 const authorsRouter = require("./modules/authors");
 const usersRouter = require("./modules/users");
-const localStrategy = require("./modules/users").localStrategy;
+const proxy = require("http-proxy-middleware");
+const LocalStrategy = require("./modules/users").LocalStrategy;
+const GoogleStrategy = require("./modules/users").GoogleStrategy;
 const port = process.env.PORT || 4200;
 const app = (0, express_1.default)();
+app.use(cors());
 app.use(session({
     secret: "r8q,+&1LM3)CD*zAGpx1xm{NeQhc;#",
     resave: false,
@@ -25,17 +28,17 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true,
 }));
-passport.use(localStrategy);
+passport.use(LocalStrategy);
+passport.use(GoogleStrategy);
 passport.serializeUser(db.login.serializeUser());
 passport.deserializeUser(db.login.deserializeUser());
 app.use("/api", booksRouter.router);
 app.use("/api", authorsRouter.router);
-app.use("/api", usersRouter.router);
+app.use("/api/users", usersRouter.router);
 connectMongoDB();
 app.listen(port, () => {
     console.log(`Server starts on port http://localhost:${port}`);

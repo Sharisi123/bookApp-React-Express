@@ -12,13 +12,16 @@ const db = require("./modules/login/models");
 const booksRouter = require("./modules/books/");
 const authorsRouter = require("./modules/authors");
 const usersRouter = require("./modules/users");
+const proxy = require("http-proxy-middleware");
 
-const localStrategy = require("./modules/users").localStrategy;
+const LocalStrategy = require("./modules/users").LocalStrategy;
+const GoogleStrategy = require("./modules/users").GoogleStrategy;
 
 const port = process.env.PORT || 4200;
 
 const app = express();
 
+app.use(cors());
 app.use(
   session({
     secret: "r8q,+&1LM3)CD*zAGpx1xm{NeQhc;#",
@@ -31,7 +34,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(cors());
 app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
@@ -39,7 +41,8 @@ app.use(
   })
 );
 
-passport.use(localStrategy);
+passport.use(LocalStrategy);
+passport.use(GoogleStrategy);
 
 passport.serializeUser(db.login.serializeUser());
 passport.deserializeUser(db.login.deserializeUser());

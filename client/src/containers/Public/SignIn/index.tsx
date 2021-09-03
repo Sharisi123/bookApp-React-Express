@@ -1,5 +1,6 @@
+import { GoogleOutlined } from "@ant-design/icons";
 import { Form, Input, Button } from "antd";
-import { loginUser } from "api/loginApi";
+import { loginUser, loginUserWithGoogle } from "api/loginApi";
 import history from "utils/history";
 import styles from "./styles.module.scss";
 
@@ -14,6 +15,11 @@ const SignIn = () => {
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const signInWithGoogle = async () => {
+    const loginWithGoogle = await loginUserWithGoogle();
+    console.log(loginWithGoogle);
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -44,6 +50,12 @@ const SignIn = () => {
           rules={[{ required: true, message: "Please input your password!" }]}
         >
           <Input.Password />
+        </Form.Item>
+
+        <Form.Item
+          rules={[{ required: true, message: "Please input your password!" }]}
+        >
+          <GoogleOutlined onClick={signInWithGoogle} />
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
