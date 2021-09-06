@@ -12,10 +12,10 @@ const db = require("./modules/login/models");
 const booksRouter = require("./modules/books/");
 const authorsRouter = require("./modules/authors");
 const usersRouter = require("./modules/users");
-const proxy = require("http-proxy-middleware");
 
 const LocalStrategy = require("./modules/users").LocalStrategy;
 const GoogleStrategy = require("./modules/users").GoogleStrategy;
+const GitHubStrategy = require("./modules/users").GitHubStrategy;
 
 const port = process.env.PORT || 4200;
 
@@ -43,6 +43,7 @@ app.use(
 
 passport.use(LocalStrategy);
 passport.use(GoogleStrategy);
+passport.use(GitHubStrategy);
 
 passport.serializeUser(db.login.serializeUser());
 passport.deserializeUser(db.login.deserializeUser());

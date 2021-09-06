@@ -5,7 +5,10 @@ export const loginUser = async (data: any): Promise<any> => {
   return response;
 };
 
-export const loginUserWithGoogle = async (): Promise<any> => {
-  const response = await api.get("users/google");
-  return response;
+export const loginUserWithGoogle = (): void => {
+  document.location.href = "http://localhost:4200/api/users/google";
+};
+
+export const loginUserWithGithub = (): void => {
+  document.location.href = "http://localhost:4200/api/users/github";
 };

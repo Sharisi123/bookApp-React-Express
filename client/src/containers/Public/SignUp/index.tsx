@@ -6,7 +6,7 @@ import history from "utils/history";
 import styles from "./styles.module.scss";
 
 const SingUp = () => {
-  const [selectValue, setSelectValue] = useState("");
+  const [selectValue, setSelectValue] = useState("reader");
 
   const onFinish = async (values: any) => {
     const response = await register({

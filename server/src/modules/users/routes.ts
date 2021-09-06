@@ -1,5 +1,4 @@
 import express from "express";
-import { nextTick } from "process";
 
 const passport = require("passport");
 const loginController = require("./controller");
@@ -20,14 +19,13 @@ router.get(
   })
 );
 
-router.get("/google/callback", (req, res, next) => {
-  passport.authenticate("google", { session: false }, (err: any, user: any) => {
-    return !err
-      ? user
-        ? res.status(200).send(user)
-        : res.status(500).send({ message: "cant find or create user" })
-      : res.status(500).send({ message: err });
-  })(req, res, next);
-});
+router.get("/google/callback", loginController.googleCallback);
+
+router.get(
+  "/github",
+  passport.authenticate("github", { scope: ["user:email"] })
+);
+
+router.get("/github/callback", loginController.githubCallback);
 
 module.exports = router;
