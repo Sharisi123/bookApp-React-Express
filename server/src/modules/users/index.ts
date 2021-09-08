@@ -1,6 +1,6 @@
 module.exports = {
-  LocalStrategy: require("./controller").LocalStrategy,
-  GoogleStrategy: require("./controller").GoogleStrategy,
-  GitHubStrategy: require("./controller").GitHubStrategy,
+  LocalStrategy: require("./strategies/local.strategy").LocalStrategy,
+  GoogleStrategy: require("./strategies/google.strategy").GoogleStrategy,
+  GitHubStrategy: require("./strategies/github.strategy").GitHubStrategy,
   router: require("./routes"),
 };

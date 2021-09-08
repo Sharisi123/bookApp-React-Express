@@ -30,6 +30,17 @@ exports.getAuthors = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         res.status(500).send(err.message);
     }
 });
+exports.setNewAuthor = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("req.body", req.body);
+    try {
+        const result = yield db.authors.create(Object.assign({}, req.body));
+        res.send(result);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send(err.message);
+    }
+});
 exports.getAuthorsById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const _id = req.params.id;
     try {

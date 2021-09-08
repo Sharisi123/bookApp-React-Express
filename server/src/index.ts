@@ -7,8 +7,6 @@ const session = require("express-session");
 const passport = require("passport");
 const { connectMongoDB } = require("./connectMongoDB");
 
-const db = require("./modules/login/models");
-
 const booksRouter = require("./modules/books/");
 const authorsRouter = require("./modules/authors");
 const usersRouter = require("./modules/users");
@@ -44,9 +42,6 @@ app.use(
 passport.use(LocalStrategy);
 passport.use(GoogleStrategy);
 passport.use(GitHubStrategy);
-
-passport.serializeUser(db.login.serializeUser());
-passport.deserializeUser(db.login.deserializeUser());
 
 app.use("/api", booksRouter.router);
 app.use("/api", authorsRouter.router);

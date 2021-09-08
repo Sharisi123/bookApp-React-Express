@@ -5,6 +5,8 @@ const router = express.Router();
 
 router.get("/authors", authorController.getAuthors);
 
+router.post("/authors", authorController.setNewAuthor);
+
 router.get("/authors/:id", authorController.getAuthorsById);
 
 router.patch("/author/:id", authorController.updateAuthorBooks);

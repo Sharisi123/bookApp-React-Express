@@ -23,6 +23,22 @@ exports.getAuthors = async (req: express.Request, res: express.Response) => {
     res.status(500).send(err.message);
   }
 };
+
+exports.setNewAuthor = async (req: express.Request, res: express.Response) => {
+  console.log("req.body", req.body);
+
+  try {
+    const result = await db.authors.create({
+      ...req.body,
+    });
+
+    res.send(result);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err.message);
+  }
+};
+
 exports.getAuthorsById = async (
   req: express.Request,
   res: express.Response

@@ -1,15 +1,16 @@
-import { Form, Input, Button, Select, AutoComplete } from "antd";
+import { Form, Input, Button, Select } from "antd";
 import { Option } from "antd/lib/mentions";
-import { register } from "api/registerApi";
 import { useState } from "react";
+import { useStore } from "stores";
 import history from "utils/history";
 import styles from "./styles.module.scss";
 
 const SingUp = () => {
+  const { authStore } = useStore();
   const [selectValue, setSelectValue] = useState("reader");
 
   const onFinish = async (values: any) => {
-    const response = await register({
+    const response = await authStore.signUp({
       ...values,
       role: selectValue,
     });

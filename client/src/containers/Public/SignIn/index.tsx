@@ -1,17 +1,15 @@
 import { GithubOutlined, GoogleOutlined } from "@ant-design/icons";
 import { Form, Input, Button } from "antd";
-import {
-  loginUser,
-  loginUserWithGithub,
-  loginUserWithGoogle,
-} from "api/loginApi";
 import history from "utils/history";
 import styles from "./styles.module.scss";
+import { useStore } from "stores";
 
 const SignIn = () => {
+  const { authStore } = useStore();
+
   const onFinish = async (values: any) => {
     try {
-      const response = await loginUser(values);
+      const response = await authStore.signIn(values);
 
       if (response.status === 200) {
         history.push("/");
@@ -53,8 +51,8 @@ const SignIn = () => {
         <Form.Item
           rules={[{ required: true, message: "Please input your password!" }]}
         >
-          <GoogleOutlined onClick={loginUserWithGoogle} />
-          <GithubOutlined onClick={loginUserWithGithub} />
+          <GoogleOutlined onClick={authStore.loginUserWithGoogle} />
+          <GithubOutlined onClick={authStore.loginUserWithGithub} />
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>

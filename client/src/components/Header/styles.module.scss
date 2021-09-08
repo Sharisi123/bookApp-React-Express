@@ -2,30 +2,51 @@
   height: 60px;
   width: 100%;
   background-color: rgb(91, 141, 214);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  // display: flex;
+  // align-items: center;
+  // justify-content: space-between;
+  // flex-direction: row-reverse;
 
-  ul{
-    margin: 0;
+  .login {
+    height: 60px;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    list-style: none;
-  
-    li {
-      margin-left: 20px;
+    flex-direction: row-reverse;
+  }
 
-      a {
-        text-decoration: none;
-        color: #fff;
-        font-size: 18px;
-        text-transform: uppercase
-      }
-      a:hover {
-        color: rgb(255, 177, 177);
+  .menu {
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+
+    ul{
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      list-style: none;
+    
+      li {
+        margin-left: 20px;
+  
+        a {
+          text-decoration: none;
+          color: #fff;
+          font-size: 18px;
+          text-transform: uppercase
+        }
+        a:hover {
+          color: rgb(255, 177, 177);
+        }
       }
     }
+  }
+  
+  button {
+    margin-right: 20px;
   }
 
   .active {

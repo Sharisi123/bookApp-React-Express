@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { deleteBook, updateBook } from "api/booksApi";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import styles from "./styles.module.scss";
 import { Button, Input } from "antd";
 import TextArea from "antd/lib/input/TextArea";
-import { getAuthorsById } from "api/authorsApi";
 import Loader from "components/Loader";
 import { NavLink } from "react-router-dom";
+import { useStore } from "stores";
 
 interface IProps {
   img: string;
@@ -29,6 +28,8 @@ const BookItem = ({
   getBooksHandler,
   viewMode,
 }: IProps) => {
+  const { booksStore, authorsStore } = useStore();
+
   const [imgState, setImgState] = useState(img);
   const [titleState, setTitleState] = useState(title);
   const [dateState, setDateState] = useState(date);
@@ -42,14 +43,14 @@ const BookItem = ({
     setIsEdited((edited) => !edited);
   };
   const onDelete = async () => {
-    await deleteBook(id);
+    await booksStore.deleteBook(id);
 
     getBooksHandler && (await getBooksHandler());
   };
 
   const getAuthorName = async () => {
     setLoading(true);
-    const data = await getAuthorsById(authorId);
+    const data = await authorsStore.getAuthorsById(authorId);
     // @ts-ignore
     setAuthorName(data.firstName + " " + data.lastName);
     setLoading(false);
@@ -62,7 +63,7 @@ const BookItem = ({
 
   const updateBookHandler = async () => {
     setIsButtonDisable(true);
-    await updateBook({
+    await booksStore.updateBook({
       img: imgState,
       title: titleState,
       realizeDate: dateState,
