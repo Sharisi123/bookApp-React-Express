@@ -3,6 +3,7 @@ const db = require("../models");
 const GitHubStrategy = require("passport-github2").Strategy;
 const passport = require("passport");
 const url = require("url");
+const generateToken = require("../generateToken");
 
 exports.GitHubStrategy = new GitHubStrategy(
   {
@@ -23,7 +24,6 @@ exports.GitHubStrategy = new GitHubStrategy(
 
       if (!findResult) {
         const createResult = await db.users.create({
-          token: accessToken,
           provider: "github",
           username: String(profile.username).toLowerCase(),
           email: "test@test.com",
@@ -42,7 +42,7 @@ exports.GitHubStrategy = new GitHubStrategy(
         });
       }
     } catch (err) {
-      console.log(err);
+      console.log(err.message);
       return done(err.message, false);
     }
   }
@@ -50,12 +50,14 @@ exports.GitHubStrategy = new GitHubStrategy(
 
 exports.githubCallback = (req: any, res: any, next: any) => {
   passport.authenticate("github", (err: any, user: any) => {
-    // @ts-ignore
-    if (!err & !!user) {
+    if (!err && !!user) {
+      const id = user._doc._id.toString();
+      const JWT = generateToken({ id });
+
       return res.redirect(
         url.format({
           pathname: `${process.env.REACT_APP_HOST}/checkUser`,
-          query: { token: user.accessToken, provider: "github" },
+          query: { token: user.accessToken, provider: "github", JWT },
         })
       );
     } else {

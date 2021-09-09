@@ -1,12 +1,21 @@
 import { Button } from "antd";
-import ModalLogin from "components/ModalLogin";
-import ModalRegister from "components/ModelRegister";
-import React from "react";
+import React, { useEffect } from "react";
 import { useStore } from "stores";
 import styles from "./styles.module.scss";
 
 const Welcome = () => {
   const { authStore } = useStore();
+
+  useEffect(() => {
+    const jwt = localStorage.getItem("jwt");
+    if (jwt) {
+      checkUserAuthorize(jwt);
+    }
+  }, []);
+
+  const checkUserAuthorize = async (jwt: string) => {
+    await authStore.checkUserAuthorize(jwt);
+  };
 
   return (
     <div className={styles.welcome}>
@@ -20,15 +29,6 @@ const Welcome = () => {
           register
         </Button>{" "}
       </h1>
-
-      {/* <ModalRegister
-        visible={authStore.isRegisterModalVisible}
-        onCancel={() => authStore.setRegisterModal(false)}
-      />
-      <ModalLogin
-        visible={authStore.isLoginModalVisible}
-        onCancel={() => authStore.setLoginModal(false)}
-      /> */}
     </div>
   );
 };

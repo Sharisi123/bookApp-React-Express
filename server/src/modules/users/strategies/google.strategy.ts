@@ -3,6 +3,7 @@ const db = require("../models");
 const GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 const passport = require("passport");
 const url = require("url");
+const generateToken = require("../generateToken");
 
 const findOrCreateGoogleUser = async (profile: any, callback: any) => {
   try {
@@ -12,7 +13,6 @@ const findOrCreateGoogleUser = async (profile: any, callback: any) => {
 
     if (!result) {
       const createdGoogleUser = await db.users.create({
-        token: profile.accessToken,
         provider: "google",
         username: String(profile._json.name).toLowerCase(),
         email: "test@mail.com",
@@ -60,11 +60,14 @@ exports.GoogleStrategy = new GoogleStrategy(
 
 exports.googleCallback = (req: any, res: any, next: any) => {
   passport.authenticate("google", { session: false }, (err: any, user: any) => {
+    const id = user._doc._id.toString();
+    const JWT = generateToken({ id });
+
     if (!err && !!user) {
       return res.redirect(
         url.format({
           pathname: `${process.env.REACT_APP_HOST}/checkUser`,
-          query: { token: user.accessToken, provider: "google" },
+          query: { token: user.accessToken, provider: "google", JWT },
         })
       );
     } else {

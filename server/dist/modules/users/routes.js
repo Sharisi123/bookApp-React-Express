@@ -10,15 +10,17 @@ const githubController = require("./strategies/github.strategy");
 const googleController = require("./strategies/google.strategy");
 const router = express_1.default.Router();
 router.get("/", authController.getUser);
-router.post("/login", passport.authenticate("local"), authController.passportLogin);
+router.post("/authenticate", authController.authenticateToken);
+router.post("/login", passport.authenticate("local", {
+    session: false,
+}), authController.passportLogin);
 router.post("/register", authController.register);
+// GOOGLE
 router.get("/google", passport.authenticate("google", {
-    scope: [
-        "https://www.googleapis.com/auth/plus.login",
-        // "https://www.googleapis.com/auth/contacts",
-    ],
+    scope: ["https://www.googleapis.com/auth/plus.login"],
 }));
 router.get("/google/callback", googleController.googleCallback);
+// GITHUB
 router.get("/github", passport.authenticate("github", { scope: ["user:email"] }));
 router.get("/github/callback", githubController.githubCallback);
 module.exports = router;

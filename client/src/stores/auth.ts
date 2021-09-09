@@ -1,5 +1,6 @@
 import { observable, action, makeObservable, runInAction } from "mobx";
 import { api } from "config";
+import history from "utils/history";
 
 const endpoint = "users";
 
@@ -14,6 +15,16 @@ class Store {
   @action
   async signIn(dataFields: any) {
     const { data } = await api.post(`/${endpoint}/login`, dataFields);
+    if (data.JWT) {
+      localStorage.setItem("jwt", data.JWT);
+    }
+    runInAction(() => {
+      this.user = data.user;
+    });
+
+    if (this.user) {
+      history.replace("/books");
+    }
     return data;
   }
 
@@ -24,18 +35,19 @@ class Store {
   }
 
   @action
-  async setLoginModal(value: boolean) {
+  setLoginModal(value: boolean) {
     this.isLoginModalVisible = value;
   }
 
   @action
-  async setRegisterModal(value: boolean) {
+  setRegisterModal(value: boolean) {
     this.isRegisterModalVisible = value;
   }
 
   @action
   signOut() {
     this.user = null;
+    localStorage.removeItem("jwt");
   }
 
   @action
@@ -54,6 +66,19 @@ class Store {
     runInAction(() => {
       this.user = data;
     });
+  }
+
+  @action
+  async checkUserAuthorize(token: string) {
+    const { data } = await api.post(`/${endpoint}/authenticate`);
+    runInAction(() => {
+      this.user = data;
+    });
+    if (this.user) {
+      history.replace("/books");
+    }
+
+    return data;
   }
 }
 export default new Store();

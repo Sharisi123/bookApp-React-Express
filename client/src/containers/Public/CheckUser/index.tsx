@@ -14,6 +14,11 @@ const CheckUser = observer(() => {
       ignoreQueryPrefix: true,
     });
     console.log(parsedQs);
+    if (parsedQs.hasOwnProperty("JWT")) {
+      const jwt = qs.stringify(parsedQs).split("&")[2].replace("JWT=", "");
+      console.log(jwt);
+      localStorage.setItem("jwt", jwt);
+    }
 
     if (parsedQs.hasOwnProperty("token")) {
       const token = qs.stringify(parsedQs);

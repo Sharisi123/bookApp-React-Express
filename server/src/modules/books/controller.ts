@@ -2,17 +2,17 @@ import express from "express";
 
 const db = require("./models");
 
-exports.createBook = () => {
-  db.books.create({
-    img: "http://loveread.ec/img/photo_books/88525.jpg",
-    title: "Быстро падая",
-    content:
-      "Хейли уверена: это лето изменит ее жизнь. Она бросит вызов своим страхам и отправится в путешествие, чтобы выполнить данное лучшему другу обещание и наконец стать собой – смелой Хейли. Вот только все идет не по плану. Машина ломается, деньги заканчиваются, а ее новый знакомый, Чейз Уиттакер, кажется, влюбляется в нее!",
-    realizeDate: "2020",
-    authorId: "yosivoni",
-    _id: "bistroPadaya",
-  });
-};
+// exports.createBook = () => {
+//   db.books.create({
+//     img: "http://loveread.ec/img/photo_books/88525.jpg",
+//     title: "Быстро падая",
+//     content:
+//       "Хейли уверена: это лето изменит ее жизнь. Она бросит вызов своим страхам и отправится в путешествие, чтобы выполнить данное лучшему другу обещание и наконец стать собой – смелой Хейли. Вот только все идет не по плану. Машина ломается, деньги заканчиваются, а ее новый знакомый, Чейз Уиттакер, кажется, влюбляется в нее!",
+//     realizeDate: "2020",
+//     authorId: "yosivoni",
+//     _id: "bistroPadaya",
+//   });
+// };
 
 exports.getBooks = async (req: express.Request, res: express.Response) => {
   try {

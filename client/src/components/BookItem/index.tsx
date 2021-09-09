@@ -118,7 +118,7 @@ const BookItem = ({
               Автор: <NavLink to={`/authors/${authorId}`}>{authorName}</NavLink>
             </p>
 
-            <p>
+            <p className={styles.content}>
               {isEdited ? (
                 <TextArea
                   value={contentState}

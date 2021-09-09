@@ -2,7 +2,6 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  
   "main": "dist/index.js",
   "scripts": {
     "prebuild": "tsconfig.json --fix",
@@ -21,13 +20,16 @@
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "express-jwt": "^6.1.0",
     "express-session": "^1.17.2",
     "http-proxy-middleware": "^2.0.1",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.2",
     "passport": "^0.4.1",
     "passport-github": "^1.1.0",
     "passport-github2": "^0.1.12",
     "passport-google-oauth": "^2.0.0",
+    "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^6.1.0",
     "url": "^0.11.0"

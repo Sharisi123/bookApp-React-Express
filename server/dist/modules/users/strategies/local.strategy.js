@@ -13,6 +13,7 @@ require("dotenv").config();
 const db = require("../models");
 const bcrypt = require("bcrypt");
 const LocalStrategy = require("passport-local").Strategy;
+const generateToken = require("../generateToken");
 const findUser = (username, callback) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield db.users.findOne({ username: username });
@@ -24,6 +25,8 @@ const findUser = (username, callback) => __awaiter(void 0, void 0, void 0, funct
 });
 exports.LocalStrategy = new LocalStrategy((username, password, done) => {
     findUser(username, (err, user) => {
+        const id = user._doc._id.toString();
+        const JWT = generateToken({ id });
         if (err) {
             return done(err);
         }
@@ -35,7 +38,7 @@ exports.LocalStrategy = new LocalStrategy((username, password, done) => {
             return done(null, false);
         }
         else {
-            return done(null, user);
+            return done(null, { JWT, data: user._doc });
         }
     });
 });

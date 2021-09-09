@@ -29,7 +29,6 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    token: String,
     phoneNumber: Number,
     books: [],
   },

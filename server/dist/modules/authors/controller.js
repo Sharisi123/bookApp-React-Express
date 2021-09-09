@@ -10,17 +10,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const db = require("./models");
-exports.createAuthor = () => {
-    db.authors.create({
-        firstName: "Бьянка",
-        lastName: "Йосовони",
-        email: "testMain@gmail.com",
-        phoneNumber: "+62321304343",
-        booksCount: "1",
-        books: ["vzletayaVisoko"],
-        _id: "yosivoni",
-    });
-};
+// exports.createAuthor = () => {
+//   db.authors.create({
+//     firstName: "Бьянка",
+//     lastName: "Йосовони",
+//     email: "testMain@gmail.com",
+//     phoneNumber: "+62321304343",
+//     booksCount: "1",
+//     books: ["vzletayaVisoko"],
+//     _id: "yosivoni",
+//   });
+// };
 exports.getAuthors = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield db.authors.find().sort({ updatedAt: -1 });
