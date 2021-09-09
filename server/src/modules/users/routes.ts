@@ -1,12 +1,10 @@
 import express from "express";
-const passport = require("passport");
+const passport = require("../../_helpers/passport");
 const authController = require("./controller");
 const githubController = require("./strategies/github.strategy");
 const googleController = require("./strategies/google.strategy");
 
 const router = express.Router();
-
-router.get("/", authController.getUser);
 
 router.post("/authenticate", authController.authenticateToken);
 

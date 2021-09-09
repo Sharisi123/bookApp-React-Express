@@ -4,12 +4,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const passport = require("passport");
+const passport = require("../../_helpers/passport");
 const authController = require("./controller");
 const githubController = require("./strategies/github.strategy");
 const googleController = require("./strategies/google.strategy");
 const router = express_1.default.Router();
-router.get("/", authController.getUser);
 router.post("/authenticate", authController.authenticateToken);
 router.post("/login", passport.authenticate("local", {
     session: false,

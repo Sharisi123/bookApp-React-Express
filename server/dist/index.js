@@ -23,6 +23,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true,
 }));
+app.use(jwt());
 passport.use(LocalStrategy);
 passport.use(GoogleStrategy);
 passport.use(GitHubStrategy);

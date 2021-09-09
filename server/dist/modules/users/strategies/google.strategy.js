@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("dotenv").config();
 const db = require("../models");
 const GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
-const passport = require("passport");
+const passport = require("../../../_helpers/passport");
 const url = require("url");
 const generateToken = require("../generateToken");
 const findOrCreateGoogleUser = (profile, callback) => __awaiter(void 0, void 0, void 0, function* () {
@@ -45,8 +45,7 @@ exports.GoogleStrategy = new GoogleStrategy({
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: `${process.env.NODE_APP_HOST}/api/users/google/callback`,
 }, (accessToken, refreshToken, profile, done) => __awaiter(void 0, void 0, void 0, function* () {
-    const data = Object.assign({ accessToken }, profile);
-    findOrCreateGoogleUser(data, (err, user) => {
+    findOrCreateGoogleUser(profile, (err, user) => {
         if (err) {
             return done(err);
         }
@@ -60,11 +59,11 @@ exports.GoogleStrategy = new GoogleStrategy({
 exports.googleCallback = (req, res, next) => {
     passport.authenticate("google", { session: false }, (err, user) => {
         const id = user._doc._id.toString();
-        const JWT = generateToken({ id });
+        const token = generateToken({ id });
         if (!err && !!user) {
             return res.redirect(url.format({
                 pathname: `${process.env.REACT_APP_HOST}/checkUser`,
-                query: { token: user.accessToken, provider: "google", JWT },
+                query: { token },
             }));
         }
         else {

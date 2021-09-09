@@ -1,7 +1,7 @@
 require("dotenv").config();
 const db = require("../models");
 const GitHubStrategy = require("passport-github2").Strategy;
-const passport = require("passport");
+const passport = require("../../../_helpers/passport");
 const url = require("url");
 const generateToken = require("../generateToken");
 
@@ -52,12 +52,12 @@ exports.githubCallback = (req: any, res: any, next: any) => {
   passport.authenticate("github", (err: any, user: any) => {
     if (!err && !!user) {
       const id = user._doc._id.toString();
-      const JWT = generateToken({ id });
+      const token = generateToken({ id });
 
       return res.redirect(
         url.format({
           pathname: `${process.env.REACT_APP_HOST}/checkUser`,
-          query: { token: user.accessToken, provider: "github", JWT },
+          query: { token },
         })
       );
     } else {

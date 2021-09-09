@@ -20,15 +20,14 @@ function authMiddleware() {
     },
   }).unless({
     path: [
-      "api/users",
-      "api/users/",
-      "api/users/authorize",
-      "api/users/login",
-      "api/users/register",
-      "api/users/google",
-      "api/users/google/callback",
-      "api/users/github",
-      "api/users/github/callback",
+      "/api/users/",
+      "/api/users/authorize/",
+      "/api/users/login",
+      "/api/users/register/",
+      "/api/users/google/",
+      "/api/users/google/callback/",
+      "/api/users/github/",
+      "/api/users/github/callback/",
     ],
   });
 }

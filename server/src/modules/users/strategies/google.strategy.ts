@@ -1,7 +1,7 @@
 require("dotenv").config();
 const db = require("../models");
 const GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
-const passport = require("passport");
+const passport = require("../../../_helpers/passport");
 const url = require("url");
 const generateToken = require("../generateToken");
 
@@ -37,12 +37,7 @@ exports.GoogleStrategy = new GoogleStrategy(
     callbackURL: `${process.env.NODE_APP_HOST}/api/users/google/callback`,
   },
   async (accessToken: any, refreshToken: any, profile: any, done: any) => {
-    const data = {
-      accessToken,
-      ...profile,
-    };
-
-    findOrCreateGoogleUser(data, (err: string, user: any) => {
+    findOrCreateGoogleUser(profile, (err: string, user: any) => {
       if (err) {
         return done(err);
       }
@@ -61,13 +56,13 @@ exports.GoogleStrategy = new GoogleStrategy(
 exports.googleCallback = (req: any, res: any, next: any) => {
   passport.authenticate("google", { session: false }, (err: any, user: any) => {
     const id = user._doc._id.toString();
-    const JWT = generateToken({ id });
+    const token = generateToken({ id });
 
     if (!err && !!user) {
       return res.redirect(
         url.format({
           pathname: `${process.env.REACT_APP_HOST}/checkUser`,
-          query: { token: user.accessToken, provider: "google", JWT },
+          query: { token },
         })
       );
     } else {

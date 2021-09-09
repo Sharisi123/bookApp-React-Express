@@ -26,7 +26,7 @@ const findUser = (username, callback) => __awaiter(void 0, void 0, void 0, funct
 exports.LocalStrategy = new LocalStrategy((username, password, done) => {
     findUser(username, (err, user) => {
         const id = user._doc._id.toString();
-        const JWT = generateToken({ id });
+        const token = generateToken({ id });
         if (err) {
             return done(err);
         }
@@ -38,7 +38,7 @@ exports.LocalStrategy = new LocalStrategy((username, password, done) => {
             return done(null, false);
         }
         else {
-            return done(null, { JWT, data: user._doc });
+            return done(null, { token, data: user._doc });
         }
     });
 });
