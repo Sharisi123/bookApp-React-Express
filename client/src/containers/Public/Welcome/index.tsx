@@ -1,10 +1,16 @@
 import { Button } from "antd";
-import React, { useEffect } from "react";
+import ModalWindow from "components/ModalWindow";
+import React, { useEffect, useState } from "react";
 import { useStore } from "stores";
 import styles from "./styles.module.scss";
+import ReactDOM from "react-dom";
+import ModalLogin from "components/ModalLogin";
+import ModalRegister from "components/ModelRegister";
 
 const Welcome = () => {
   const { authStore } = useStore();
+  const [loginModal, setLoginModal] = useState(false);
+  const [registerModal, setRegisterModal] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
@@ -21,14 +27,20 @@ const Welcome = () => {
     <div className={styles.welcome}>
       <h1>
         To see more content you need to{" "}
-        <Button type="link" onClick={() => authStore.setLoginModal(true)}>
+        <Button type="link" onClick={() => setLoginModal(true)}>
           login
         </Button>{" "}
         or{" "}
-        <Button type="link" onClick={() => authStore.setRegisterModal(true)}>
+        <Button type="link" onClick={() => setRegisterModal(true)}>
           register
         </Button>{" "}
       </h1>
+
+      <ModalLogin visible={loginModal} onCancel={() => setLoginModal(false)} />
+      <ModalRegister
+        visible={registerModal}
+        onCancel={() => setRegisterModal(false)}
+      />
     </div>
   );
 };

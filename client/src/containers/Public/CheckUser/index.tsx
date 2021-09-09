@@ -4,7 +4,6 @@ import { useStore } from "stores";
 import Loader from "components/Loader";
 import history from "utils/history";
 import { observer } from "mobx-react";
-import { toJS } from "mobx";
 
 const CheckUser = observer(() => {
   const { authStore } = useStore();

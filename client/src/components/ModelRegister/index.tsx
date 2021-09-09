@@ -1,8 +1,8 @@
-import { Modal } from "antd";
 import { Form, Input, Button } from "antd";
 import history from "utils/history";
 import styles from "./styles.module.scss";
 import { useStore } from "stores";
+import ModalWindow from "components/ModalWindow";
 
 interface IProps {
   visible: boolean;
@@ -29,12 +29,7 @@ const ModalRegister = ({ visible, onCancel }: IProps) => {
   };
 
   return (
-    <Modal
-      title="Register"
-      visible={visible}
-      onCancel={onCancel}
-      footer={false}
-    >
+    <ModalWindow title="Register" visible={visible} onCancel={onCancel}>
       <div className={styles.signUp}>
         <h2>You need to register</h2>
         <Form
@@ -105,7 +100,7 @@ const ModalRegister = ({ visible, onCancel }: IProps) => {
           </Form.Item>
         </Form>
       </div>
-    </Modal>
+    </ModalWindow>
   );
 };
 

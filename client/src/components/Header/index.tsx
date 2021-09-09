@@ -13,16 +13,7 @@ const Header = observer(() => {
   return (
     <div className={styles.header}>
       {!authStore.user ? (
-        <div className={styles.login}>
-          <ModalLogin
-            visible={authStore.isLoginModalVisible}
-            onCancel={() => authStore.setLoginModal(false)}
-          />
-          <ModalRegister
-            visible={authStore.isRegisterModalVisible}
-            onCancel={() => authStore.setRegisterModal(false)}
-          />
-        </div>
+        <div className={styles.login}></div>
       ) : (
         <>
           <div className={styles.menu}>

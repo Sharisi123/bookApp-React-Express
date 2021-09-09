@@ -5,6 +5,7 @@ import history from "utils/history";
 import styles from "./styles.module.scss";
 import { useStore } from "stores";
 import { GithubOutlined, GoogleOutlined } from "@ant-design/icons";
+import ModalWindow from "components/ModalWindow";
 
 interface IProps {
   visible: boolean;
@@ -31,7 +32,7 @@ const ModalLogin = ({ visible, onCancel }: IProps) => {
   };
 
   return (
-    <Modal title="Login" visible={visible} onCancel={onCancel} footer={false}>
+    <ModalWindow title="Login" visible={visible} onCancel={onCancel}>
       <div className={styles.signIn}>
         <h2>You need to login</h2>
         <Form
@@ -72,7 +73,7 @@ const ModalLogin = ({ visible, onCancel }: IProps) => {
           </Form.Item>
         </Form>
       </div>
-    </Modal>
+    </ModalWindow>
   );
 };
 
