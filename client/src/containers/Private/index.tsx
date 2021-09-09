@@ -1,6 +1,5 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import { useStore } from "stores";
 import { observer } from "mobx-react";
 import BookList from "containers/Private/BooksList";
 import Authors from "containers/Private/Authors";

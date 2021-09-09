@@ -7,14 +7,14 @@ const Welcome = () => {
   const { authStore } = useStore();
 
   useEffect(() => {
-    const jwt = localStorage.getItem("jwt");
-    if (jwt) {
-      checkUserAuthorize(jwt);
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      checkUserAuthorize(token);
     }
   }, []);
 
-  const checkUserAuthorize = async (jwt: string) => {
-    await authStore.checkUserAuthorize(jwt);
+  const checkUserAuthorize = async (token: string) => {
+    await authStore.checkUserAuthorize(token);
   };
 
   return (

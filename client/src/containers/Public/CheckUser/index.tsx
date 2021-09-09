@@ -14,28 +14,21 @@ const CheckUser = observer(() => {
       ignoreQueryPrefix: true,
     });
     console.log(parsedQs);
-    if (parsedQs.hasOwnProperty("JWT")) {
-      const jwt = qs.stringify(parsedQs).split("&")[2].replace("JWT=", "");
-      console.log(jwt);
-      localStorage.setItem("jwt", jwt);
-    }
-
     if (parsedQs.hasOwnProperty("token")) {
-      const token = qs.stringify(parsedQs);
-      getUser(token);
+      const token = qs.stringify(parsedQs).replace("token=", "");
+      localStorage.setItem("jwt", token);
+      checkUserAuthorize(token);
     }
   }, []);
 
   useEffect(() => {
-    console.log(toJS(authStore.user));
-
     if (authStore.user) {
       history.replace("/books");
     }
   }, [authStore.user]);
 
-  const getUser = async (token: string) => {
-    await authStore.getUser(token);
+  const checkUserAuthorize = async (token: string) => {
+    if (localStorage.getItem("jwt")) await authStore.checkUserAuthorize(token);
   };
 
   return (

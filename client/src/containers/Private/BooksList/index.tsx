@@ -6,16 +6,12 @@ import styles from "./styles.module.scss";
 import qs from "qs";
 
 const List = () => {
-  const { booksStore, authStore } = useStore();
+  const { booksStore } = useStore();
   let [booksList, setBooksList] = useState<IGetBookResponse[]>([]);
 
   const getBooksHandler = async () => {
     const books = await booksStore.getBooks();
     setBooksList(books);
-  };
-
-  const getUser = async (token: string) => {
-    const user = await authStore.getUser(token);
   };
 
   useEffect(() => {
@@ -26,7 +22,6 @@ const List = () => {
     if (parsedQs) {
       const token = qs.stringify(parsedQs, { encodeValuesOnly: true });
       console.log(token);
-      // getUser(token);
     }
 
     getBooksHandler();

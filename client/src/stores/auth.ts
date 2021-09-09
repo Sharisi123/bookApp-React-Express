@@ -15,9 +15,13 @@ class Store {
   @action
   async signIn(dataFields: any) {
     const { data } = await api.post(`/${endpoint}/login`, dataFields);
-    if (data.JWT) {
-      localStorage.setItem("jwt", data.JWT);
+    console.log(data);
+
+    api.defaults.headers.Authorization = `Bearer ${data.token}`;
+    if (data.token) {
+      localStorage.setItem("jwt", data.token);
     }
+
     runInAction(() => {
       this.user = data.user;
     });
@@ -61,15 +65,8 @@ class Store {
   }
 
   @action
-  async getUser(accessToken: string) {
-    const { data } = await api.get(`/${endpoint}?${accessToken}`);
-    runInAction(() => {
-      this.user = data;
-    });
-  }
-
-  @action
   async checkUserAuthorize(token: string) {
+    api.defaults.headers.Authorization = `Bearer ${token}`;
     const { data } = await api.post(`/${endpoint}/authenticate`);
     runInAction(() => {
       this.user = data;

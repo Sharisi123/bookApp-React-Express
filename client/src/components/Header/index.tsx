@@ -14,20 +14,10 @@ const Header = observer(() => {
     <div className={styles.header}>
       {!authStore.user ? (
         <div className={styles.login}>
-          {/* <Button type="default" onClick={() => authStore.setLoginModal(true)}>
-            Login
-          </Button> */}
           <ModalLogin
             visible={authStore.isLoginModalVisible}
             onCancel={() => authStore.setLoginModal(false)}
           />
-
-          {/* <Button
-            type="default"
-            onClick={() => authStore.setRegisterModal(true)}
-          >
-            Register
-          </Button> */}
           <ModalRegister
             visible={authStore.isRegisterModalVisible}
             onCancel={() => authStore.setRegisterModal(false)}
