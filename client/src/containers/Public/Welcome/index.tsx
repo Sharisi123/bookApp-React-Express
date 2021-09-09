@@ -1,9 +1,7 @@
 import { Button } from "antd";
-import ModalWindow from "components/ModalWindow";
 import React, { useEffect, useState } from "react";
 import { useStore } from "stores";
 import styles from "./styles.module.scss";
-import ReactDOM from "react-dom";
 import ModalLogin from "components/ModalLogin";
 import ModalRegister from "components/ModelRegister";
 

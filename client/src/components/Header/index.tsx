@@ -3,18 +3,14 @@ import styles from "./styles.module.scss";
 import { NavLink } from "react-router-dom";
 import { useStore } from "stores";
 import { Button } from "antd";
-import ModalLogin from "components/ModalLogin";
 import { observer } from "mobx-react";
-import ModalRegister from "components/ModelRegister";
 
 const Header = observer(() => {
   const { authStore } = useStore();
 
   return (
     <div className={styles.header}>
-      {!authStore.user ? (
-        <div className={styles.login}></div>
-      ) : (
+      {authStore.user ? (
         <>
           <div className={styles.menu}>
             <ul>
@@ -42,7 +38,7 @@ const Header = observer(() => {
             </div>
           </div>
         </>
-      )}
+      ) : null}
     </div>
   );
 });
