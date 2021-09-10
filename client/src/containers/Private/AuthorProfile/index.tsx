@@ -5,14 +5,25 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useStore } from "stores";
 import styles from "./styles.module.scss";
+import cn from "classnames";
 
-const AuthorProfile = () => {
+interface IProps {
+  dark: boolean;
+  darkStyles: string;
+}
+
+const AuthorProfile = ({ dark, darkStyles }: IProps) => {
   const { authorsStore, booksStore } = useStore();
   const [author, setAuthor] = useState<IGetAuthorsResponse | null>(null);
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(false);
   // @ts-ignore
   const { id } = useParams();
+
+  useEffect(() => {
+    getInfo();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const getInfo = async (): Promise<void> => {
     let arr = [];
@@ -28,13 +39,12 @@ const AuthorProfile = () => {
     setLoading(false);
   };
 
-  useEffect(() => {
-    getInfo();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
-    <div className={styles.authorProfile}>
+    <div
+      className={cn(styles.authorProfile, {
+        [darkStyles]: dark,
+      })}
+    >
       {loading ? (
         <Loader />
       ) : (

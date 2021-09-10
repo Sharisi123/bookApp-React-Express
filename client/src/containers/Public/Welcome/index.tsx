@@ -4,8 +4,14 @@ import { useStore } from "stores";
 import styles from "./styles.module.scss";
 import ModalLogin from "components/ModalLogin";
 import ModalRegister from "components/ModelRegister";
+import cn from "classnames";
 
-const Welcome = () => {
+interface IProps {
+  dark: boolean;
+  darkStyles: string;
+}
+
+const Welcome = ({ dark, darkStyles }: IProps) => {
   const { authStore } = useStore();
   const [loginModal, setLoginModal] = useState(false);
   const [registerModal, setRegisterModal] = useState(false);
@@ -22,7 +28,11 @@ const Welcome = () => {
   };
 
   return (
-    <div className={styles.welcome}>
+    <div
+      className={cn(styles.welcome, {
+        [darkStyles]: dark,
+      })}
+    >
       <h1>
         To see more content you need to{" "}
         <Button type="link" onClick={() => setLoginModal(true)}>

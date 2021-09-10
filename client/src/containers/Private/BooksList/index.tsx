@@ -3,32 +3,33 @@ import { IGetBookResponse } from "models/booksResponse";
 import { useEffect, useState } from "react";
 import { useStore } from "stores";
 import styles from "./styles.module.scss";
-import qs from "qs";
+import cn from "classnames";
+interface IProps {
+  dark: boolean;
+  darkStyles: string;
+}
 
-const List = () => {
+const BookList = ({ dark, darkStyles }: IProps) => {
   const { booksStore } = useStore();
   let [booksList, setBooksList] = useState<IGetBookResponse[]>([]);
+
+  useEffect(() => {
+    if (!booksList.length) {
+      getBooksHandler();
+    }
+  }, []);
 
   const getBooksHandler = async () => {
     const books = await booksStore.getBooks();
     setBooksList(books);
   };
 
-  useEffect(() => {
-    const parsedQs = qs.parse(window.location.search, {
-      ignoreQueryPrefix: true,
-    });
-
-    if (parsedQs) {
-      const token = qs.stringify(parsedQs, { encodeValuesOnly: true });
-      console.log(token);
-    }
-
-    getBooksHandler();
-  }, []);
-
   return (
-    <div className={styles.list}>
+    <div
+      className={cn(styles.list, {
+        [darkStyles]: dark,
+      })}
+    >
       {booksList.map((item) => (
         <BookItem
           key={item._id}
@@ -45,4 +46,4 @@ const List = () => {
   );
 };
 
-export default List;
+export default BookList;

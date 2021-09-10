@@ -4,15 +4,20 @@ import { useStore } from "stores";
 import Loader from "components/Loader";
 import history from "utils/history";
 import { observer } from "mobx-react";
+import cn from "classnames";
 
-const CheckUser = observer(() => {
+interface IProps {
+  dark: boolean;
+  darkStyles: string;
+}
+
+const CheckUser = observer(({ dark, darkStyles }: IProps) => {
   const { authStore } = useStore();
 
   useEffect(() => {
     const parsedQs = qs.parse(window.location.search, {
       ignoreQueryPrefix: true,
     });
-    console.log(parsedQs);
     if (parsedQs.hasOwnProperty("token")) {
       const token = qs.stringify(parsedQs).replace("token=", "");
       localStorage.setItem("jwt", token);
@@ -31,7 +36,11 @@ const CheckUser = observer(() => {
   };
 
   return (
-    <div>
+    <div
+      className={cn({
+        [darkStyles]: dark,
+      })}
+    >
       <h2>
         Checking authorization... <Loader />
       </h2>

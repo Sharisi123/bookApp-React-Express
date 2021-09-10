@@ -6,8 +6,13 @@ import _ from "lodash";
 import { useRef, useState, useEffect } from "react";
 import styles from "./styles.module.scss";
 import { useStore } from "stores";
+import cn from "classnames";
+interface IProps {
+  dark: boolean;
+  darkStyles: string;
+}
 
-const Create = () => {
+const Create = ({ dark, darkStyles }: IProps) => {
   const { authorsStore, booksStore } = useStore();
   const [authors, setAuthors] = useState<IGetAuthorsResponse[]>([]);
   const [authorSelect, setAuthorSelect] = useState("");
@@ -63,7 +68,11 @@ const Create = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <div
+      className={cn(styles.container, {
+        [darkStyles]: dark,
+      })}
+    >
       {loading ? (
         <Loader />
       ) : (

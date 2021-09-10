@@ -2,10 +2,18 @@
   height: 60px;
   width: 100%;
   background-color: rgb(91, 141, 214);
-  // display: flex;
-  // align-items: center;
-  // justify-content: space-between;
-  // flex-direction: row-reverse;
+
+  .themeSwitcher {
+    margin-left: 20px;
+  }
+  .info {
+    p:first-child {
+      display: inline;
+      color: #fff;
+      font-size: 20px;
+      margin-right: 20px;
+    }
+  }
 
   .login {
     height: 60px;
@@ -21,6 +29,7 @@
     justify-content: space-between;
     align-items: center;
     flex-direction: row;
+    margin: 0 20px;
 
     ul{
       margin: 0;
@@ -43,10 +52,6 @@
         }
       }
     }
-  }
-  
-  button {
-    margin-right: 20px;
   }
 
   .active {

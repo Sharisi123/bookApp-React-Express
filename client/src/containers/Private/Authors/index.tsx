@@ -5,8 +5,13 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { useStore } from "stores";
 import styles from "./styles.module.scss";
+import cn from "classnames";
+interface IProps {
+  dark: boolean;
+  darkStyles: string;
+}
 
-const Authors = () => {
+const Authors = ({ dark, darkStyles }: IProps) => {
   const { authorsStore } = useStore();
   const [authors, setAuthors] = useState<IGetAuthorsResponse[]>([]);
   const [loading, setLoading] = useState(false);
@@ -25,7 +30,11 @@ const Authors = () => {
   }, []);
 
   return (
-    <div className={styles.authors}>
+    <div
+      className={cn(styles.authors, {
+        [darkStyles]: dark,
+      })}
+    >
       {loading ? (
         <Loader />
       ) : (
