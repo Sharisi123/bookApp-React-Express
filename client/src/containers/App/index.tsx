@@ -1,14 +1,12 @@
 import Header from "components/Header";
-import { Router, Switch, Route } from "react-router";
+import { Router } from "react-router";
 import history from "utils/history";
 import { Provider } from "mobx-react";
 import store from "stores";
-import Welcome from "containers/Public/Welcome";
-import PrivateRoute from "components/PrivateRoute";
-import Private from "containers/Private";
-import CheckUser from "containers/Public/CheckUser";
 import styles from "./styles.module.scss";
 import { useEffect, useState } from "react";
+import ThemeSwitcher from "components/ThemeSwitcher";
+import AllRoutes from "./AllRoutes";
 
 function App() {
   const [isThemeDark, setIsThemeDark] = useState(false);
@@ -29,29 +27,16 @@ function App() {
     localStorage.setItem("isThemeDark", JSON.stringify(!isThemeDark));
   };
 
-  const WelcomeProps = () => (
-    <Welcome dark={isThemeDark} darkStyles={styles.dark} />
-  );
-  const CheckUserProps = () => (
-    <CheckUser dark={isThemeDark} darkStyles={styles.dark} />
-  );
-
   return (
     <Provider {...store}>
       <Router history={history}>
         <Header changeTheme={SwitchTheme} />
 
-        <Switch>
-          <Route exact path="/" component={WelcomeProps} />
-          <Route exact path="/checkUser" component={CheckUserProps} />
-
-          <PrivateRoute
-            component={Private}
-            path="/"
-            dark={isThemeDark}
-            darkStyles={styles.dark}
-          />
-        </Switch>
+        <ThemeSwitcher
+          component={AllRoutes}
+          dark={isThemeDark}
+          darkStyles={styles.dark}
+        />
       </Router>
     </Provider>
   );
