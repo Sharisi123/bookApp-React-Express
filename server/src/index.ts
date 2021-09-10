@@ -4,7 +4,7 @@ require("dotenv").config();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const passport = require("passport");
-const { connectMongoDB } = require("./connectMongoDB");
+const mongoDB = require("./mongoDB");
 
 const booksRouter = require("./modules/books/");
 const authorsRouter = require("./modules/authors");
@@ -39,7 +39,7 @@ app.use("/api", booksRouter.router);
 app.use("/api", authorsRouter.router);
 app.use("/api/users", usersRouter.router);
 
-connectMongoDB();
+mongoDB();
 
 app.listen(port, () => {
   console.log(`Server starts on port http://localhost:${port}`);

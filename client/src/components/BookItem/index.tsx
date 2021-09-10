@@ -121,6 +121,7 @@ const BookItem = ({
             <p className={styles.content}>
               {isEdited ? (
                 <TextArea
+                  style={{ minHeight: "150px" }}
                   value={contentState}
                   onChange={(e) => setContentState(e.target.value)}
                 />

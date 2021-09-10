@@ -15,7 +15,6 @@ class Store {
   @action
   async signIn(dataFields: any) {
     const { data } = await api.post(`/${endpoint}/login`, dataFields);
-    console.log(data);
 
     api.defaults.headers.Authorization = `Bearer ${data.token}`;
     if (data.token) {

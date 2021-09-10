@@ -30,7 +30,9 @@ const AuthorProfile = ({ dark, darkStyles }: IProps) => {
     setLoading(true);
     const author = await authorsStore.getAuthorsById(id);
     setAuthor(author);
-    for (let bookId of author.books) {
+
+    for (const bookId of author.books) {
+      console.log(bookId);
       const book = await booksStore.getBookById(bookId);
       arr.push(book);
     }

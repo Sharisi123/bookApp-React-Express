@@ -26,8 +26,12 @@ exports.getBooks = async (req: express.Request, res: express.Response) => {
 exports.getBooksById = async (req: express.Request, res: express.Response) => {
   try {
     const _id = req.params.id;
-    const result = await db.books.findById({ _id }).sort({ updatedAt: -1 });
-    res.send(result);
+    const result = await db.books.findById({ _id });
+    if (result) {
+      res.status(200).send(result);
+    } else {
+      res.status(200).send();
+    }
   } catch (err) {
     res.status(500).send(err.message);
   }
