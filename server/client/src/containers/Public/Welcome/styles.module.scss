@@ -1,0 +1,13 @@
+.welcome {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 200px;
+
+  h1 {
+    button {
+      padding: 0;
+      font-size: 24px;
+    }
+  }
+}

@@ -7,8 +7,10 @@
     "prebuild": "tsconfig.json --fix",
     "build": "tsc",
     "prestart": "npm run build",
-    "start": "node .",
-    "dev": "nodemon ."
+    "heroku-postbuild": "npm run install-client && npm run build",
+    "server": "nodemon .",
+    "develop": "concurrently --kill-others-on-fail \"npm run server\" \"npm run start --prefix client\"",
+    "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run start --prefix client\""
   },
   "author": "",
   "license": "ISC",

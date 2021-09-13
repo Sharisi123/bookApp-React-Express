@@ -1,0 +1,62 @@
+.header {
+  height: 60px;
+  width: 100%;
+  background-color: rgb(91, 141, 214);
+
+  .themeSwitcher {
+    margin-left: 20px;
+  }
+  .info {
+    p:first-child {
+      display: inline;
+      color: #fff;
+      font-size: 20px;
+      margin-right: 20px;
+    }
+  }
+
+  .login {
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row-reverse;
+  }
+
+  .menu {
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    margin: 0 20px;
+
+    ul{
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      list-style: none;
+    
+      li {
+        margin-left: 20px;
+  
+        a {
+          text-decoration: none;
+          color: #fff;
+          font-size: 18px;
+          text-transform: uppercase
+        }
+        a:hover {
+          color: rgb(255, 177, 177);
+        }
+      }
+    }
+  }
+
+  .active {
+    color: rgb(112, 11, 11);
+  }
+}
+
+

@@ -1,0 +1,14 @@
+.authorItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  // justify-content: center;
+  width: 210px;
+  margin: 50px;
+  cursor: pointer;
+
+  img {
+    width: 200px;
+    height: auto;
+  }
+}

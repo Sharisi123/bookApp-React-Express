@@ -1,0 +1,41 @@
+.modalMask {
+  z-index: 20;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+
+  background-color: rgba(0, 0, 0, 0.555);
+
+  .modalWindow {
+    display: flex;
+    flex-direction: column;
+    margin: 200px auto;
+    z-index: 22;
+    padding: 20px;
+
+    background-color: #fff;
+    width: 500px;
+    height: auto;
+
+    .modalContent {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      .modalHeader {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #eee;
+
+        span {
+          cursor: pointer;
+          font-size: 24px;
+        }
+      }
+    }
+  }
+}
