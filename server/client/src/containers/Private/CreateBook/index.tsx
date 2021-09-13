@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Button, Form, Input, Select } from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import Loader from "components/Loader";

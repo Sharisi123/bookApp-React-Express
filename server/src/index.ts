@@ -17,7 +17,7 @@ const GitHubStrategy = require("./modules/users").GitHubStrategy;
 
 const jwt = require("./_helpers/jwt");
 
-const port = process.env.PORT || 300;
+const port = 5000;
 
 const app = express();
 
