@@ -14,9 +14,8 @@
     "build-client": "cd client && npm run build",
     "install-client": "cd client && npm install",
     "heroku-postbuild": "npm run install-client && npm run build-client",
-    "server": "nodemon .",
-    "develop": "concurrently --kill-others-on-fail \"npm run server\" \"npm run start --prefix client\"",
-    "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run start --prefix client\""
+    "server": "nodemon dist/index.js",
+    "start": "concurrently \"npm run server\" \"npm start --prefix client\""
   },
   "author": "",
   "license": "ISC",
@@ -26,6 +25,7 @@
     "axios": "^0.21.4",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
+    "concurrently": "^6.2.1",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",

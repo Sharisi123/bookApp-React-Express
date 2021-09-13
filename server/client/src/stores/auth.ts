@@ -55,12 +55,12 @@ class Store {
 
   @action
   loginUserWithGoogle() {
-    document.location.href = `${process.env.REACT_APP_HOST}/${endpoint}/google`;
+    document.location.href = `http://localhost:5001/api/${endpoint}/google`;
   }
 
   @action
   loginUserWithGithub() {
-    document.location.href = `${process.env.REACT_APP_HOST}/${endpoint}/github`;
+    document.location.href = `http://localhost:5001/api/${endpoint}/github`;
   }
 
   @action

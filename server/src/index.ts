@@ -17,7 +17,7 @@ const GitHubStrategy = require("./modules/users").GitHubStrategy;
 
 const jwt = require("./_helpers/jwt");
 
-const port = 5000;
+const port = 5001;
 
 const app = express();
 
@@ -44,8 +44,8 @@ mongoDB();
 
 app.use(express.static(path.resolve(__dirname, "./client/build")));
 // Step 2:
-app.get("*", function (request, response) {
-  response.sendFile(path.resolve(__dirname, "./client/build", "index.html"));
+app.get("*", (request, response) => {
+  response.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
 });
 
 app.listen(port, () => {
