@@ -8,7 +8,6 @@
     "npm": "6.x"
   },
   "scripts": {
-    "prebuild": "tsconfig.json --fix",
     "build": "tsc",
     "prestart": "npm run build",
     "build-client": "cd client && npm run build",
