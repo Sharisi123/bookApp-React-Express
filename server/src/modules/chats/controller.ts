@@ -76,7 +76,6 @@ exports.getChatById = async (req: any, res: any) => {
 
     const result = await db.chats.findById({ _id });
     if (result) {
-      createChatHandler(result);
       // socket.emit("newChat", result);
       res.status(200).send(result);
     }
