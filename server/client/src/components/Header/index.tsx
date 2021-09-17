@@ -33,6 +33,11 @@ const Header = observer(({ changeTheme }: IProps) => {
                 Create book
               </NavLink>
             </li>
+            <li>
+              <NavLink to="/chats" activeClassName={styles.active}>
+                Chats
+              </NavLink>
+            </li>
           </ul>
 
           <div className={styles.info}>

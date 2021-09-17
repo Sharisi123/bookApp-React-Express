@@ -76,5 +76,11 @@ class Store {
 
     return data;
   }
+
+  @action
+  async getUsers() {
+    const { data } = await api.get(`${endpoint}`);
+    return data;
+  }
 }
 export default new Store();

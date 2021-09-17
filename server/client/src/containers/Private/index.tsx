@@ -5,6 +5,7 @@ import BookList from "containers/Private/BooksList";
 import Authors from "containers/Private/Authors";
 import AuthorProfile from "containers/Private/AuthorProfile";
 import Create from "containers/Private/CreateBook";
+import Chats from "./Chats";
 
 interface IProps {
   dark: boolean;
@@ -26,6 +27,7 @@ const Private = observer(({ dark, darkStyles }: IProps) => {
         <Route exact path="/create" component={CreateProps} />
         <Route exact path="/authors" component={AuthorsProps} />
         <Route exact path="/authors/:id" component={AuthorProfileProps} />
+        <Route exact path="/chats" component={Chats} />
       </Switch>
     </>
   );

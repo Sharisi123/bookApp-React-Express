@@ -5,6 +5,8 @@ import styles from "./styles.module.scss";
 import ModalLogin from "components/ModalLogin";
 import ModalRegister from "components/ModelRegister";
 import cn from "classnames";
+import { io } from "socket.io-client";
+import socket from "utils/socket";
 
 interface IProps {
   dark: boolean;
@@ -18,6 +20,7 @@ const Welcome = ({ dark, darkStyles }: IProps) => {
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
+
     if (token) {
       checkUserAuthorize(token);
     }

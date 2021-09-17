@@ -4,6 +4,7 @@ import { configure, observable } from "mobx";
 import authStore from "./auth";
 import booksStore from "./books";
 import authorsStore from "./authors";
+import chatsStore from "./chats";
 
 configure({ enforceActions: "observed" });
 
@@ -11,6 +12,7 @@ class RootStore {
   @observable authStore = authStore;
   @observable booksStore = booksStore;
   @observable authorsStore = authorsStore;
+  @observable chatsStore = chatsStore;
 }
 
 const rootStore = new RootStore();

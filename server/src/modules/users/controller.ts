@@ -13,6 +13,21 @@ exports.passportLogin = (req: any, res: any) => {
   res.status(200).send(user);
 };
 
+exports.getUsers = async (req: any, res: any) => {
+  try {
+    const result = await db.users.find({}, { username: 1 });
+
+    if (result) {
+      res.status(200).send(result);
+    } else {
+      res.status(200).send("no users");
+    }
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).send();
+  }
+};
+
 exports.authenticateToken = async (req: any, res: any) => {
   const authHeader = req.headers["authorization"];
 

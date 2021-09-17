@@ -6,6 +6,8 @@ const googleController = require("./strategies/google.strategy");
 
 const router = express.Router();
 
+router.get("/", authController.getUsers);
+
 router.post("/authenticate", authController.authenticateToken);
 
 router.post(
