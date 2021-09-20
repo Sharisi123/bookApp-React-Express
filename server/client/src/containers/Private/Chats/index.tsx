@@ -114,7 +114,7 @@ const Chats = () => {
         <Tabs tabPosition="left" destroyInactiveTabPane={true}>
           {chats.map((item: any) => (
             <TabPane tab={item.chatName} key={item._id}>
-              <ChatItem chatId={item._id} user={user} users={users} />
+              <ChatItem chatId={item._id} user={user} />
             </TabPane>
           ))}
         </Tabs>

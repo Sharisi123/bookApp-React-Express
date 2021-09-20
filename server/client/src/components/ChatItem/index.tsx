@@ -2,7 +2,7 @@ import { Button, Input } from "antd";
 import cn from "classnames";
 import Loader from "components/Loader";
 import { IChat } from "models/chats";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useStore } from "stores";
 import socket from "utils/socket";
 import styles from "./styles.module.scss";
@@ -10,11 +10,11 @@ import styles from "./styles.module.scss";
 interface IProps {
   chatId: string;
   user: any;
-  users: any;
 }
 
-const ChatItem = ({ chatId, user, users }: IProps) => {
+const ChatItem = ({ chatId, user }: IProps) => {
   const { chatsStore } = useStore();
+  const messagesEndRef = useRef(null);
   const [chatMessage, setChatMessage] = useState("");
   const [chat, setChat] = useState<IChat | null>(null);
   const [messageHistory, setMessageHistory] = useState<
@@ -28,14 +28,30 @@ const ChatItem = ({ chatId, user, users }: IProps) => {
 
     socket.on("message", (message) => {
       console.log("new message", message);
-
       // @ts-ignore
       setMessageHistory((prevState) => [...prevState, message]);
+      scrollToBottom();
     });
+
     return () => {
       socket.emit("chatLeave", chatId);
     };
   }, []);
+
+  const scrollToBottom = () => {
+    // @ts-ignore
+    messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const getTime = (timestamp: number) => {
+    let d = new Date(timestamp);
+
+    let hh = ("0" + d.getHours()).slice(-2);
+    let min = ("0" + d.getMinutes()).slice(-2);
+
+    const time = `${hh}:${min}`;
+    return time;
+  };
 
   const getChat = async (chatId: string) => {
     const chat = await chatsStore.getChatById(chatId);
@@ -86,9 +102,12 @@ const ChatItem = ({ chatId, user, users }: IProps) => {
                 <div key={item._id} className={styles.message}>
                   {item.message}
                 </div>
-                {item.username}
+                <span>
+                  {item.username} {getTime(Number(item.createdAt))}
+                </span>
               </div>
             ))}
+            <div ref={messagesEndRef} />
           </div>
 
           <div className={styles.controls}>
