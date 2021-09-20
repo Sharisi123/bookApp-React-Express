@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
-import { Button, Dropdown, Tabs, Menu } from "antd";
+import { Button, Dropdown, Tabs, Menu, Checkbox } from "antd";
 import ChatItem from "components/ChatItem";
 import { useStore } from "stores";
 import { toJS } from "mobx";
@@ -9,29 +9,35 @@ import Loader from "components/Loader";
 import ModalChatCreate from "components/ModalChatCreate";
 import ReactDOM from "react-dom";
 import socket from "utils/socket";
-
 const { TabPane } = Tabs;
 
 const Chats = () => {
   const { chatsStore, authStore } = useStore();
+  const [user] = useState(toJS(authStore.user));
   const [chats, setChats] = useState<any>([]);
   const [users, setUsers] = useState();
-  const [user] = useState(toJS(authStore.user));
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedUsername, setSelectedUsername] = useState("");
-  const [usersIds, setUserIds] = useState<string[]>([]);
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+
   useEffect(() => {
+    // @ts-ignore
+    socket.emit("userJoin", user._id);
     socket.on("newChat", (newChat) => {
       setChats((prevState: any) => [...prevState, newChat]);
     });
 
     getChats();
     loadUsers();
+
+    return () => {
+      // @ts-ignore
+      socket.emit("userLeave", user._id);
+    };
   }, []);
 
   const loadUsers = async () => {
     const users = await authStore.getUsers();
-    console.log(users);
     // @ts-ignore
     const filteredUsers = users.filter((item) => item._id !== user?._id);
     setUsers(filteredUsers);
@@ -39,30 +45,45 @@ const Chats = () => {
 
   const getChats = async () => {
     // @ts-ignore
-    const allUserChats = await chatsStore.getUserChats(user._id);
-    console.log(allUserChats);
-    setChats(allUserChats);
+    const userChats = await chatsStore.getUserChats(user._id);
+    setChats(userChats);
   };
 
-  const handleMenuClick = (e: any) => {
-    setSelectedUsername(e.domEvent.nativeEvent.target.innerText);
-    // @ts-ignore
-    setUserIds([e.key, user._id]);
+  const checkBoxChangeHandler = (checkedValues: any) => {
+    setSelectedUsers(checkedValues);
+  };
+
+  const dropdownButtonHandler = () => {
     setIsModalVisible(true);
   };
 
   const menu = (
-    <Menu onClick={handleMenuClick}>
-      {users ? (
+    <Menu mode="inline" className={styles.menu}>
+      <Checkbox.Group
+        style={{ width: "100%" }}
         // @ts-ignore
-        users?.map((item: any) => (
-          <Menu.Item key={item._id} icon={<UserOutlined />}>
-            {item.username}
-          </Menu.Item>
-        ))
-      ) : (
-        <Loader />
-      )}
+        onChange={checkBoxChangeHandler}
+      >
+        {users ? (
+          // @ts-ignore
+          users?.map((item: any) => (
+            <Menu.Item key={item._id} icon={<UserOutlined />}>
+              <Checkbox value={item.username}>{item.username}</Checkbox>
+            </Menu.Item>
+          ))
+        ) : (
+          <Loader />
+        )}
+        <div className={styles.buttonCenter}>
+          <Button
+            onClick={dropdownButtonHandler}
+            // @ts-ignore
+            disabled={!selectedUsers.length}
+          >
+            Create chat
+          </Button>
+        </div>
+      </Checkbox.Group>
     </Menu>
   );
 
@@ -70,26 +91,34 @@ const Chats = () => {
     <div className={styles.chats}>
       {ReactDOM.createPortal(
         <ModalChatCreate
-          companionName={selectedUsername}
+          selectedUsers={selectedUsers}
+          users={users}
           isModalVisible={isModalVisible}
           setIsModalVisible={setIsModalVisible}
-          usersIds={usersIds}
         />,
         // @ts-ignore
         document.getElementById("root")
       )}
-      <Dropdown overlay={menu}>
+
+      <Dropdown
+        overlay={menu}
+        visible={dropdownVisible}
+        onVisibleChange={(flag) => setDropdownVisible(flag)}
+      >
         <Button>
           Create new chat <DownOutlined />
         </Button>
       </Dropdown>
-      <Tabs tabPosition="left">
-        {chats.map((item: any) => (
-          <TabPane tab={item.chatName} key={item._id}>
-            <ChatItem chat={item} user={user} key={item._id} />
-          </TabPane>
-        ))}
-      </Tabs>
+
+      <div className={styles.tabs}>
+        <Tabs tabPosition="left" destroyInactiveTabPane={true}>
+          {chats.map((item: any) => (
+            <TabPane tab={item.chatName} key={item._id}>
+              <ChatItem chatId={item._id} user={user} users={users} />
+            </TabPane>
+          ))}
+        </Tabs>
+      </div>
     </div>
   );
 };

@@ -1,3 +1,18 @@
 .chats {
-  margin: 40px 20px;
+  margin: 40px 40px;
+
+  
+
+  .tabs {
+    margin-top: 20px;
+  }
+}
+
+.buttonCenter {
+  display: flex;
+  justify-content: center;
+
+  button {
+    margin: 7px 0;
+  }
 }

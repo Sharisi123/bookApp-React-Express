@@ -1,19 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
 import { Modal, Button, Form, Input } from "antd";
 import { useStore } from "stores";
 
 interface IProps {
   isModalVisible: boolean;
   setIsModalVisible: (arg0: boolean) => void;
-  companionName: string;
-  usersIds: string[];
+  users: any;
+  selectedUsers: string[];
 }
 
 const ModalChatCreate = ({
   isModalVisible,
   setIsModalVisible,
-  companionName,
-  usersIds,
+  users,
+  selectedUsers,
 }: IProps) => {
   const { chatsStore } = useStore();
 
@@ -26,13 +26,16 @@ const ModalChatCreate = ({
   };
 
   const onFinish = (values: any) => {
-    console.log("Success:", values);
-    console.log(usersIds);
-
+    let currentUsers = selectedUsers.map((username) =>
+      users.find((item: any) => (item.username === username ? item._id : null))
+    );
+    const usersIds = currentUsers.map((item) => item._id);
     chatsStore.createNewChat({
       chatName: values.chatName,
       users: usersIds,
     });
+
+    setIsModalVisible(false);
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -42,7 +45,8 @@ const ModalChatCreate = ({
   return (
     <>
       <Modal
-        title={`Creating chat with ${companionName}`}
+        // @ts-ignore
+        title={`Creating chat with ${selectedUsers.join(", ")}`}
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}

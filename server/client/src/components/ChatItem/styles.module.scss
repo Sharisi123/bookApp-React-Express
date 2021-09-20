@@ -1,23 +1,45 @@
-.chatContainer {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
+@import '../../source/styles/styles.scss';
 
-  .myMessage {
-    width: 200px;
-    height: auto;
-    border: 1px solid black;
-    border-radius: 5px;
-    margin-right: auto;
-    order: 2;
+.chatItem {
+  height: 70vh;
+  display: grid;
+  grid-template-rows: 11fr 1fr;
+
+  .chatInfo {
+    display: flex;
+    align-items: center;
+    height: 60px;
+
+    h3 {
+      margin-left: 20px;
+    }
   }
 
-  .notMyMessage {
-    width: 200px;
-    height: auto;
-    border: 1px solid black;
-    border-radius: 5px;
-    margin-left: auto;
-    order: 2;
+  .chatContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .myMessage {
+      @include message('right');
+    }
+
+    .notMyMessage {
+      @include message('left');
+    }
+
+    .message {
+      border: 1.5px solid rgb(97, 149, 226);
+      border-radius: 5px;
+      padding: 7px 15px;
+      font-size: 16px;
+    }
+  }
+
+  .controls {
+    button {
+      padding: 5px 20px;
+      margin-top: 10px;
+    }
   }
 }

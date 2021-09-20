@@ -9,6 +9,7 @@ const cors = require("cors");
 const passport = require("passport");
 const mongoDB = require("./mongoDB");
 const jwt = require("./_helpers/jwt");
+const socketJwt = require("./_helpers/socketJwt");
 const path = require("path");
 
 const booksRouter = require("./modules/books/");
@@ -43,6 +44,8 @@ app.use(
 app.use(jwt());
 
 io.use((socket: any, next: any) => {
+  console.log("socket jwt is work");
+
   const header = socket.handshake.headers["authorization"];
   if (jwt(header)) {
     return next();

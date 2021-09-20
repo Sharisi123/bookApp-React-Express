@@ -12,11 +12,6 @@ class Store {
   @observable isRegistered = false;
 
   @action
-  joinRoom = async (roomName: string): Promise<void> => {
-    await socket.emit("join", roomName);
-  };
-
-  @action
   async getUserChats(userId: string): Promise<IChat[]> {
     const { data } = await api.get(`${endpoint}`, {
       params: {
@@ -27,17 +22,14 @@ class Store {
   }
 
   @action
-  getCurrentChat = async (chatId: string): Promise<any> => {
+  getChatById = async (chatId: string): Promise<any> => {
     const { data } = await api.get(`${endpoint}/${chatId}`);
     return data;
   };
+
   @action
   createNewChat = async ({ users, chatName }: ICreateChat): Promise<any> => {
-    const { data } = await api.post(`${endpoint}/createChat`, {
-      users,
-      chatName,
-    });
-    return data;
+    socket.emit("newChat", { users, chatName });
   };
 }
 export default new Store();

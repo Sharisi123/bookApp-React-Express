@@ -19,6 +19,10 @@ const chatsSchema = new Schema(
           type: String,
           required: true,
         },
+        username: {
+          type: String,
+          required: true,
+        },
         message: {
           type: String,
           required: true,

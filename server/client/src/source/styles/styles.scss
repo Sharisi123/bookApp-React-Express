@@ -2,3 +2,20 @@ body {
   margin: 0;
   padding: 0;
 }
+
+@mixin message($side) {
+  margin: 3px 0;
+  
+  width: 200px;
+  height: auto;
+  
+  order: 2;
+
+  @if $side=='left' {
+    margin-left: auto;
+  }
+
+  @if $side=='right' {
+    margin-right: auto;
+  }
+}

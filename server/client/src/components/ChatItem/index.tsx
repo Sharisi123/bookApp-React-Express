@@ -8,30 +8,50 @@ import socket from "utils/socket";
 import styles from "./styles.module.scss";
 
 interface IProps {
-  chat: IChat;
+  chatId: string;
   user: any;
+  users: any;
 }
 
-const ChatItem = ({ chat, user }: IProps) => {
+const ChatItem = ({ chatId, user, users }: IProps) => {
   const { chatsStore } = useStore();
   const [chatMessage, setChatMessage] = useState("");
-  const [messageHistory, setMessageHistory] = useState(chat.messages);
+  const [chat, setChat] = useState<IChat | null>(null);
+  const [messageHistory, setMessageHistory] = useState<
+    IChat["messages"] | null
+  >(null);
   const [messageLoading, setMessageLoading] = useState(false);
 
   useEffect(() => {
-    chatsStore.joinRoom(chat._id);
-    socket.on("incomingMessage", (message) => {
+    getChat(chatId);
+    socket.emit("chatJoin", chatId);
+
+    socket.on("message", (message) => {
+      console.log("new message", message);
+
       // @ts-ignore
       setMessageHistory((prevState) => [...prevState, message]);
     });
+    return () => {
+      socket.emit("chatLeave", chatId);
+    };
   }, []);
+
+  const getChat = async (chatId: string) => {
+    const chat = await chatsStore.getChatById(chatId);
+    setChat(chat);
+    setMessageHistory(chat.messages);
+  };
 
   const sendMessage = () => {
     setMessageLoading(true);
+    console.log(user.username);
+
     socket.emit(
-      "chatMessage",
+      "message",
       {
-        chatId: chat._id,
+        username: user.username,
+        chatId: chatId,
         // @ts-ignore
         userId: user._id,
         message: chatMessage,
@@ -46,15 +66,16 @@ const ChatItem = ({ chat, user }: IProps) => {
   };
 
   return (
-    <>
+    <div className={styles.chatItem}>
       {user && chat ? (
         <div className={styles.chatItem}>
-          <h2>{chat.chatName}</h2>
-
+          <div className={styles.chatInfo}>
+            <h2>Чат: {chat.chatName}</h2>
+            <h3>Кол-во участников: {chat.users.length}</h3>
+          </div>
           <div className={styles.chatContainer}>
             {messageHistory?.map((item) => (
               <div
-                key={item._id}
                 className={cn({
                   // @ts-ignore
                   [styles.myMessage]: item.userId !== user._id,
@@ -62,25 +83,30 @@ const ChatItem = ({ chat, user }: IProps) => {
                   [styles.notMyMessage]: item.userId === user._id,
                 })}
               >
-                {item.message}
+                <div key={item._id} className={styles.message}>
+                  {item.message}
+                </div>
+                {item.username}
               </div>
             ))}
           </div>
 
-          <Input
-            placeholder="send message"
-            onChange={(e) => setChatMessage(e.target.value)}
-            value={chatMessage}
-          />
+          <div className={styles.controls}>
+            <Input
+              placeholder="send message"
+              onChange={(e) => setChatMessage(e.target.value)}
+              value={chatMessage}
+            />
 
-          <Button type="primary" onClick={sendMessage}>
-            Send
-          </Button>
+            <Button type="primary" onClick={sendMessage}>
+              Send
+            </Button>
+          </div>
         </div>
       ) : (
         <Loader />
       )}
-    </>
+    </div>
   );
 };
 
