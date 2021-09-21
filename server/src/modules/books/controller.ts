@@ -8,6 +8,7 @@ exports.getBooks = async (req: express.Request, res: express.Response) => {
 
     res.send(result);
   } catch (err) {
+    logger.error(err);
     res.status(500).send(err.message);
   }
 };
@@ -21,6 +22,7 @@ exports.getBooksById = async (req: express.Request, res: express.Response) => {
       res.status(200).send();
     }
   } catch (err) {
+    logger.error(err);
     res.status(500).send(err.message);
   }
 };
@@ -34,6 +36,7 @@ exports.setBooks = async (req: express.Request, res: express.Response) => {
 
     res.send(result);
   } catch (err) {
+    logger.error(err);
     res.status(500).send(err.message);
   }
 };
@@ -50,6 +53,7 @@ exports.updateBooksById = async (
 
     res.status(200).send();
   } catch (err) {
+    logger.error(err);
     res.status(500).send(err.message);
   }
 };
@@ -62,6 +66,7 @@ exports.deleteBooksById = async (
     await db.books.findByIdAndDelete({ _id });
     res.status(200).send();
   } catch (err) {
+    logger.error(err);
     res.status(500).send(err.message);
   }
 };

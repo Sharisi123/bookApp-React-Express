@@ -9,6 +9,7 @@ const cors = require("cors");
 const passport = require("passport");
 const mongoDB = require("./mongoDB");
 const jwt = require("./_helpers/jwt");
+const logger = require("./_helpers/logger");
 const socketJwt = require("./_helpers/socketJwt");
 const path = require("path");
 
@@ -67,7 +68,7 @@ mongoDB();
 io.on("connection", chatsHandler.onConnect);
 
 httpServer.listen(port, () => {
-  console.log(`Server starts on port http://localhost:${port}`);
+  logger.info(`Server starts on port http://localhost:${port}`);
 });
 
 export {};

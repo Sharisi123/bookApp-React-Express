@@ -31,6 +31,7 @@
     "express-session": "^1.17.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.2",
+    "morgan": "^1.10.0",
     "node-pre-gyp": "^0.17.0",
     "nodemon": "^2.0.12",
     "passport": "^0.4.1",
@@ -39,7 +40,8 @@
     "passport-local": "^1.0.0",
     "socket.io": "^4.2.0",
     "typescript": "^4.4.3",
-    "url": "^0.11.0"
+    "url": "^0.11.0",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "@types/node": "^16.7.2"

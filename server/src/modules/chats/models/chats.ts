@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("../../../_helpers/mongoose");
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 
@@ -40,3 +40,4 @@ const chatsSchema = new Schema(
 const Chats = mongoose.model("chats", chatsSchema);
 
 module.exports = Chats;
+export {};

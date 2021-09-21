@@ -1,0 +1,7 @@
+2021-09-21T12:49:00.775Z [INFO]: Server starts on port http://localhost:5001
+2021-09-21T12:49:01.595Z [INFO]: socket.io user connected, socket.id is: PtM2yR-0ewO7nke8AAAC
+2021-09-21T12:49:01.614Z [INFO]: socket.io user connected, socket.id is: BepL76C2RlfPt083AAAD
+2021-09-21T12:49:08.069Z [INFO]: user (61377e717ff227f8077b8177) joined
+2021-09-21T12:49:08.231Z [INFO]: user (6148871447e06bf25813a0ca) joined to chat
+2021-09-21T12:49:11.982Z [INFO]: user 'андрей хондард' (61377e717ff227f8077b8177) send message
+2021-09-21T12:49:11.985Z [INFO]: sending message to users room (6148871447e06bf25813a0ca)

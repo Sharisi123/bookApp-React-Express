@@ -1,18 +1,7 @@
 import express from "express";
 
+const logger = require("../../_helpers/logger");
 const db = require("./models");
-
-// exports.createAuthor = () => {
-//   db.authors.create({
-//     firstName: "Бьянка",
-//     lastName: "Йосовони",
-//     email: "testMain@gmail.com",
-//     phoneNumber: "+62321304343",
-//     booksCount: "1",
-//     books: ["vzletayaVisoko"],
-//     _id: "yosivoni",
-//   });
-// };
 
 exports.getAuthors = async (req: express.Request, res: express.Response) => {
   try {
@@ -20,6 +9,7 @@ exports.getAuthors = async (req: express.Request, res: express.Response) => {
 
     res.send(result);
   } catch (err) {
+    logger.error(err);
     res.status(500).send(err.message);
   }
 };
@@ -34,7 +24,7 @@ exports.setNewAuthor = async (req: express.Request, res: express.Response) => {
 
     res.send(result);
   } catch (err) {
-    console.log(err);
+    logger.error(err);
     res.status(500).send(err.message);
   }
 };
@@ -49,6 +39,7 @@ exports.getAuthorsById = async (
 
     res.send(result);
   } catch (err) {
+    logger.error(err);
     res.status(500).send(err.message);
   }
 };
@@ -65,6 +56,7 @@ exports.updateAuthorBooks = async (
 
     res.send(result);
   } catch (err) {
+    logger.error(err);
     res.status(500).send(err.message);
   }
 };

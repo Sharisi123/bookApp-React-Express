@@ -6,11 +6,16 @@ const jwt = require("jsonwebtoken");
 const saltRounds = 10;
 
 exports.passportLogin = (req: any, res: any) => {
-  const user = {
-    token: req.user.token,
-    user: req.user.data,
-  };
-  res.status(200).send(user);
+  try {
+    const user = {
+      token: req.user.token,
+      user: req.user.data,
+    };
+    res.status(200).send(user);
+  } catch (err) {
+    logger.error(err);
+    res.status(500).send(err.message);
+  }
 };
 
 exports.getUsers = async (req: any, res: any) => {
@@ -23,33 +28,38 @@ exports.getUsers = async (req: any, res: any) => {
       res.status(200).send("no users");
     }
   } catch (e) {
-    console.log(e.message);
+    logger.error(e);
     res.status(500).send();
   }
 };
 
 exports.authenticateToken = async (req: any, res: any) => {
-  const authHeader = req.headers["authorization"];
+  try {
+    const authHeader = req.headers["authorization"];
 
-  const token = authHeader && authHeader.split(" ")[1];
+    const token = authHeader && authHeader.split(" ")[1];
 
-  if (token == null) return res.sendStatus(401);
+    if (token == null) return res.sendStatus(401);
 
-  jwt.verify(
-    token,
-    process.env.TOKEN_SECRET as string,
-    async (err: any, data: any) => {
-      if (err) return res.sendStatus(403);
+    jwt.verify(
+      token,
+      process.env.TOKEN_SECRET as string,
+      async (err: any, data: any) => {
+        if (err) return res.sendStatus(403);
 
-      if (data) {
-        const user = await db.users.findById({ _id: data.id });
+        if (data) {
+          const user = await db.users.findById({ _id: data.id });
 
-        if (user) {
-          res.status(200).send(user);
+          if (user) {
+            res.status(200).send(user);
+          }
         }
       }
-    }
-  );
+    );
+  } catch (e) {
+    logger.error(e);
+    res.status(500).send(e.message);
+  }
 };
 
 exports.register = async (req: any, res: any) => {
@@ -68,8 +78,8 @@ exports.register = async (req: any, res: any) => {
     });
     res.status(200).send("User registered");
   } catch (err) {
+    logger.error(err);
     res.send({ message: err.message });
-    console.log(err);
   }
 };
 
